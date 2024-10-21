@@ -34,4 +34,4 @@ jobs:
         run: chmod +x minikube/build.sh
 
       - name: Build with Maven
-        run: minikube-pvc/build.sh
+        run: minikube/build.sh
