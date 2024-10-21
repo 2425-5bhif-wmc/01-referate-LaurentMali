@@ -7,4 +7,9 @@ Content-Type: */*
 
 GET http://localhost:8080/q/health/live
 
+### Vehicle
+
+GET http://localhost:8080/api/vehicle
+Content-Type: application/json
+
 ###
