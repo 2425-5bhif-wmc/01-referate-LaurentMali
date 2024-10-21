@@ -1,12 +1,12 @@
-package at.htlleonding.boundary;
+package com.example.boundary;
 
-import at.htlleonding.control.VehicleRepository;
+import com.example.control.VehicleRepository;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.core.Response;
 
-@Path("vehicle")
+@Path("/vehicle")
 public class VehicleResource {
 
     @Inject

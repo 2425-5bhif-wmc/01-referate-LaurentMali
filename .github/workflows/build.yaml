@@ -19,7 +19,7 @@ jobs:
       - run: |
           pwd
           ls -lah
-        working-directory: minikube-pvc/k8s
+        working-directory: minikube/k8s
 
       - uses: actions/setup-java@v4
         with:
@@ -31,7 +31,7 @@ jobs:
         uses: docker/setup-buildx-action@v3
 
       - name: Grant execute permission for build.sh
-        run: chmod +x minikube-pvc/build.sh
+        run: chmod +x minikube/build.sh
 
       - name: Build with Maven
         run: minikube-pvc/build.sh

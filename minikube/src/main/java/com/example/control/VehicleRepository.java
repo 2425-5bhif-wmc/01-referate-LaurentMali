@@ -1,7 +1,7 @@
-package at.htlleonding.control;
+package com.example.control;
 
 
-import at.htlleonding.entity.Vehicle;
+import com.example.entity.Vehicle;
 import io.quarkus.hibernate.orm.panache.PanacheRepository;
 import jakarta.enterprise.context.ApplicationScoped;
 
