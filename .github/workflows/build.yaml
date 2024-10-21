@@ -21,7 +21,7 @@ jobs:
       - run: |
           pwd
           ls -lah
-        working-directory: ./k8s
+        working-directory: minikube-pvc/k8s
 
       - uses: actions/setup-java@v4
         with:
