@@ -6,7 +6,6 @@ import org.eclipse.microprofile.health.Liveness;
 
 @Liveness
 public class MyLivenessCheck implements HealthCheck {
-
     @Override
     public HealthCheckResponse call() {
         return HealthCheckResponse.up("alive");
