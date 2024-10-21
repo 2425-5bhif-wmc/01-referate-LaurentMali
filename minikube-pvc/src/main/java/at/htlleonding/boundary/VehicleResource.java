@@ -1,6 +1,6 @@
 package at.htlleonding.boundary;
 
-import at.htl.minikube.control.VehicleRepository;
+import at.htlleonding.control.VehicleRepository;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
