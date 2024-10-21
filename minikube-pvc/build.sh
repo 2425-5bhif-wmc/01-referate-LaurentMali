@@ -3,6 +3,10 @@
 # Convert repository name to lowercase
 REPO_NAME=$(echo "$GITHUB_REPOSITORY" | tr '[:upper:]' '[:lower:]')
 
+# Ensure the script is executed from the correct directory
+SCRIPT_DIR=$(dirname "$0")
+cd "$SCRIPT_DIR" || exit 1
+
 # Ensure the Dockerfile exists
 if [ ! -f src/main/docker/Dockerfile ]; then
   echo "Dockerfile not found!"
@@ -22,8 +26,8 @@ fi
 cp src/main/docker/Dockerfile target/
 
 # Login to GitHub Container Registry
-echo $GITHUB_TOKEN | docker login ghcr.io -u $GITHUB_ACTOR --password-stdin
+echo "$GITHUB_TOKEN" | docker login ghcr.io -u "$GITHUB_ACTOR" --password-stdin
 
 # Build and push the Docker image
-docker build --tag ghcr.io/$REPO_NAME/backend:latest ./target
-docker push ghcr.io/$REPO_NAME/backend:latest
+docker build --tag ghcr.io/"$REPO_NAME"/backend:latest ./target
+docker push ghcr.io/"$REPO_NAME"/backend:latest
