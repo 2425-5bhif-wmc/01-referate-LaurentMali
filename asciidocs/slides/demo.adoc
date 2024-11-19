@@ -1,138 +1,62 @@
-= Some Slide
-:author: firstname lastname
-:email: x.y@htl.at
-:revnumber: 1.0
-:revdate: {docdate}
-:revremark: SLIDEDEMO @ HTL Leonding
-:encoding: utf-8
-:lang: de
-:doctype: article
-//:icons: font
-:customcss: css/presentation.css
-//:revealjs_customtheme: css/sky.css
-//:revealjs_customtheme: css/black.css
-:revealjs_width: 1408
-:revealjs_height: 792
-:source-highlighter: highlightjs
-//:revealjs_parallaxBackgroundImage: images/background-landscape-light-orange.jpg
-//:revealjs_parallaxBackgroundSize: 4936px 2092px
-//:highlightjs-theme: css/atom-one-light.css
-// we want local served font-awesome fonts
-:iconfont-remote!:
-:iconfont-name: fonts/fontawesome/css/all
-//:revealjs_parallaxBackgroundImage: background-landscape-light-orange.jpg
-//:revealjs_parallaxBackgroundSize: 4936px 2092px
-ifdef::env-ide[]
-:imagesdir: ../images
-endif::[]
-ifndef::env-ide[]
-:imagesdir: images
-endif::[]
-//:revealjs_theme: sky
-//:title-slide-background-image: img.png
-:title-slide-transition: zoom
-:title-slide-transition-speed: fast
+:stylesheet: custom.css
 
-Testing filter by changing documentation file
+= Deployment
+Laurent Mali
+:icons: font
+:stem:
+:revealjs_theme: white
 
-== Slide w/ image
+== Was ist Deployment?
 
-[.stretch]
-image::img.png[]
+image::img_1.png[width=800]
 
-[.lightbg,background-opacity="0.7"]
-== Slide w/ text and background image
+== Warum brauchen wir Deployment?
 
-image::img.png[background, size="contain"]
+Deployment ist wichtig, weil:
 
+* Sie es den Benutzern ermöglicht, auf die Anwendung zuzugreifen.
+* Sie sicherstellt, dass die Anwendung in einer stabilen Umgebung läuft.
 
-* Topic 1
-* Topic 2
-* Topic 3
+== Was macht Minikube?
 
-[%auto-animate]
-== !
+*Minikube* ist ein Tool, das es ermöglicht, Kubernetes lokal auszuführen. Es:
 
-Matched element will be animated automatically!
+* Erstellt einen lokalen Kubernetes-Cluster auf dem Rechner.
+* Hilft bei der Entwicklung und dem Testen von Kubernetes-Anwendungen.
+* Bietet eine Möglichkeit, Kubernetes zu lernen, ohne einen vollwertigen Cluster zu benötigen.
 
-[%auto-animate]
-== !
+== Was macht Leocloud?
 
-[.highlight]
-Matched element will be animated automatically!
+*Leocloud* ist eine cloudbasierte Plattform, die:
 
-And move to the right position!
+* Infrastruktur für das Deployment und der Verwaltung von Anwendungen anbietet.
+* schulintern läuft und von Schülern und Lehrkräften der HTL Leonding genutzt werden kann.
 
-[%hardbreaks]
-⬆️
-⬆️
-⬆️
+== Was ist Leo-Cloud?
 
+* *Leo-Cloud* ist eine Ansammlung von Computern im Keller.
+* Mit Software Kubernetes wird die Infrastruktur verwaltet.
 
-[%auto-animate]
-== !
+== Alternativen zu Minikube
 
-[source%linenums,js,data-id=planets]
-----
-let planets = [
-  { name: 'mars', diameter: 6779 },
-]
-----
+Alternativen zu Minikube:
 
-[%auto-animate]
-== !
+* **Kind**: Kubernetes IN Docker, ein weiteres Tool zum Ausführen lokaler Kubernetes-Cluster.
+* **Docker Desktop**: Bietet eine lokale Kubernetes-Umgebung als Teil von Docker.
 
-[source%linenums,js,data-id=planets]
-----
-let planets = [
-  { name: 'mars', diameter: 6779 },
-  { name: 'earth', diameter: 12742 },
-  { name: 'jupiter', diameter: 139820 }
-]
-----
+== Alternativen zu Leocloud
 
-[%auto-animate]
-== !
+* **AWS**: Amazon Web Services, eine umfassende Cloud-Plattform.
+* **Azure**: Microsofts Cloud-Computing-Dienst.
+* **Google Cloud**: Googles Cloud-Plattform, die verschiedene Dienste anbietet.
 
-[source%linenums,js,data-id=planets]
-----
-let circumferenceReducer = ( c, planet ) => {
-  return c + planet.diameter * Math.PI;
-}
+== Warum verwenden wir trotzdem LeoCloud?
 
-let planets = [
-  { name: 'mars', diameter: 6779 },
-  { name: 'earth', diameter: 12742 },
-  { name: 'jupiter', diameter: 139820 }
-]
+* kostenlos - daher keine Kosten für den Schüler
+* Verständnis für die Cloud & Kubernetes
 
-let c = planets.reduce( circumferenceReducer, 0 )
-----
+== Warum Minikube?
 
+* Perfekt, um Kubernetes zu lernen und zu testen bevor es in eine Produktionsumgebung geht
 
-[%auto-animate,auto-animate-unmatched=false]
-== Unmatched
-
-Introduction. (matched)
-
-[%auto-animate,auto-animate-unmatched=false]
-== Unmatched
-
-Introduction. (matched)
-
-This will be shown instantly ⚡ (unmatched)
-
-
-[%auto-animate,auto-animate-duration=5]
-== Duration
-
-This animation...
-
-[%auto-animate,auto-animate-duration=5]
-== Duration
-
-This animation...
-
-...will take 5 seconds! ⌚
-
-
+== Live-Demo

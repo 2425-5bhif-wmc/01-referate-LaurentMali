@@ -11,3 +11,11 @@
 }
 
 .reveal .lightbg { background: #fff8f1d0; }
+
+p {
+    font-size: 1.5em;
+}
+
+.kleinerText {
+    font-size: 0.8em;
+}

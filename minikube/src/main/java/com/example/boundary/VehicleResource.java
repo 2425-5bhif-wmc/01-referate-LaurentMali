@@ -13,6 +13,12 @@ public class VehicleResource {
     VehicleRepository vehicleRepository;
 
     @GET
+    @Path("/hello")
+    public Response hello() {
+        return Response.ok("Hello, World!").build();
+    }
+
+    @GET
     public Response getAll() {
         return Response.ok(
                 vehicleRepository.listAll()

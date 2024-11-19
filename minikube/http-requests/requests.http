@@ -1,7 +1,7 @@
 ### hello
 
 GET http://localhost:8080/hello
-Content-Type: */*
+Content-Type: application/json
 
 ### Liveness
 

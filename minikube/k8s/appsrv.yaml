@@ -18,17 +18,11 @@ spec:
     spec:
       containers:
         - name: appsrv
-          image: ghcr.io/laurentmali/01-referate-laurentmali/backend:latest
+          image: ghcr.io/laurentmali/backend:latest
           # remove this when stable. Currently we do not take care of version numbers
           imagePullPolicy: Always
           ports:
             - containerPort: 8080
-          #startupProbe:
-          #  httpGet:
-          #    path: /q/health
-          #    port: 8080
-          #  timeoutSeconds: 5
-          #  initialDelaySeconds: 15
           readinessProbe:
             tcpSocket:
               port: 8080
@@ -36,7 +30,7 @@ spec:
             periodSeconds: 10
           livenessProbe:
             httpGet:
-              path: /q/health
+              path: /q/health/live
               port: 8080
             timeoutSeconds: 5
             initialDelaySeconds: 60
