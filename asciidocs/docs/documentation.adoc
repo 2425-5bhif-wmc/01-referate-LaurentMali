@@ -1,4 +1,4 @@
-= Quarkus-Projekt in Kubernetes mit Minikube und in LeoCloud deployen
+= Deployment eines Quarkus-Projekts mit Kubernetes
 Laurent Mali
 1.0, {docdate}
 :icons: font
@@ -74,6 +74,12 @@ quarkus.package.jar.type=uber-jar
 quarkus.hibernate-orm.sql-load-script=import.sql
 ----
 
+Mit dem Befehl `./mvnw clean quarkus:dev` starten wir das Projekt und spielen die Daten in die Datenbank ein.
+
+Nach all diesen Schritten sollte die Tabelle erfolgreich erstellt worden sein.
+
+image::images/database.png[Datenbank]
+
 == Minikube starten
 
 IMPORTANT: Starte Minikube mit dem Befehl `minikube start`.
@@ -146,9 +152,7 @@ docker build --tag ghcr.io/$GITHUB_REPOSITORY/backend:latest ./target
 docker push ghcr.io/$GITHUB_REPOSITORY/backend:latest
 ----
 
-== Deployment in Minikube
-
-image::images/step6_deployment.drawio.png[Deployment in Minikube]
+== Github-Workflow erstellen
 
 * Ganz oben im root-Verzeichnis befindet sich der Ordner `.github/workflows`.
 * Dort erstellen wir das `build.yaml`-File für die Github Actions.
@@ -286,6 +290,8 @@ spec:
 <2> Ersetze `ifXXXXXX` durch deinen IF-Schulaccount.
 
 == Deployment in Minikube
+
+image::images/step6_deployment.drawio.png[Deployment in Minikube]
 
 [source,shell]
 ----

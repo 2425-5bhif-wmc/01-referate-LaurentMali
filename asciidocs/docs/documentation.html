@@ -6,7 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="generator" content="Asciidoctor 2.0.23">
 <meta name="author" content="Laurent Mali">
-<title>Quarkus-Projekt in Kubernetes mit Minikube und in LeoCloud deployen</title>
+<title>Deployment eines Quarkus-Projekts mit Kubernetes</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
 <style>
 /*! Asciidoctor default stylesheet | MIT License | https://asciidoctor.org */
@@ -774,7 +774,7 @@ pre.rouge {
 </head>
 <body class="article toc2 toc-left">
 <div id="header">
-<h1>Quarkus-Projekt in Kubernetes mit Minikube und in LeoCloud deployen</h1>
+<h1>Deployment eines Quarkus-Projekts mit Kubernetes</h1>
 <div class="details">
 <span id="author" class="author">Laurent Mali</span><br>
 <span id="revnumber">version 1.0,</span>
@@ -792,10 +792,10 @@ pre.rouge {
 <li><a href="#_dockerfile_erstellen">7. Dockerfile erstellen</a></li>
 <li><a href="#_github_token_zum_anmelden">8. Github-Token zum Anmelden</a></li>
 <li><a href="#_build_sh_file">9. build.sh-File</a></li>
-<li><a href="#_deployment_in_minikube">10. Deployment in Minikube</a></li>
+<li><a href="#_github_workflow_erstellen">10. Github-Workflow erstellen</a></li>
 <li><a href="#_package_public_machen">11. Package public machen</a></li>
 <li><a href="#_konfiguration_für_das_deployment_in_minikube">12. Konfiguration für das Deployment in Minikube</a></li>
-<li><a href="#_deployment_in_minikube_2">13. Deployment in Minikube</a>
+<li><a href="#_deployment_in_minikube">13. Deployment in Minikube</a>
 <ul class="sectlevel2">
 <li><a href="#_minikube_dashboard_zum_überprüfen">13.1. Minikube Dashboard zum Überprüfen</a></li>
 </ul>
@@ -895,11 +895,11 @@ Optionale Schritte wie GitHub Actions sind ebenfalls erwähnt.</p>
 <div class="paragraph">
 <p>Lade dir das Projekt unter diesem Link herunter und builde es.</p>
 </div>
-<div class="admonitionblock important">
+<div class="admonitionblock note">
 <table>
 <tr>
 <td class="icon">
-<i class="fa icon-important" title="Important"></i>
+<i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
 <a href="/home/laurent/Dokumente/Referat/01-referate-LaurentMali/minikube-pvc.zip">Minikube-Projekt</a>
@@ -956,6 +956,17 @@ quarkus.hibernate-orm.database.generation<span class="o">=</span>drop-and-create
 
 quarkus.package.jar.type<span class="o">=</span>uber-jar
 quarkus.hibernate-orm.sql-load-script<span class="o">=</span>import.sql</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Mit dem Befehl <code>./mvnw clean quarkus:dev</code> starten wir das Projekt und spielen die Daten in die Datenbank ein.</p>
+</div>
+<div class="paragraph">
+<p>Nach all diesen Schritten sollte die Tabelle erfolgreich erstellt worden sein.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="images/database.png" alt="Datenbank">
 </div>
 </div>
 </div>
@@ -1110,13 +1121,8 @@ docker push ghcr.io/<span class="nv">$GITHUB_REPOSITORY</span>/backend:latest</c
 </div>
 </div>
 <div class="sect1">
-<h2 id="_deployment_in_minikube">10. Deployment in Minikube</h2>
+<h2 id="_github_workflow_erstellen">10. Github-Workflow erstellen</h2>
 <div class="sectionbody">
-<div class="imageblock">
-<div class="content">
-<img src="images/step6_deployment.drawio.png" alt="Deployment in Minikube">
-</div>
-</div>
 <div class="ulist">
 <ul>
 <li>
@@ -1301,8 +1307,13 @@ docker push ghcr.io/<span class="nv">$GITHUB_REPOSITORY</span>/backend:latest</c
 </div>
 </div>
 <div class="sect1">
-<h2 id="_deployment_in_minikube_2">13. Deployment in Minikube</h2>
+<h2 id="_deployment_in_minikube">13. Deployment in Minikube</h2>
 <div class="sectionbody">
+<div class="imageblock">
+<div class="content">
+<img src="images/step6_deployment.drawio.png" alt="Deployment in Minikube">
+</div>
+</div>
 <div class="listingblock">
 <div class="content">
 <pre class="rouge highlight"><code data-lang="shell">kubectl apply <span class="nt">-f</span> k8s/postgres.yaml
@@ -1559,7 +1570,7 @@ Ersetze <code>ifXXXXXX</code> durch deinen IF-Schulaccount.
 <div id="footer">
 <div id="footer-text">
 Version 1.0<br>
-Last updated 2024-12-10 10:02:14 +0100
+Last updated 2024-12-10 10:22:38 +0100
 </div>
 </div>
 <script>
