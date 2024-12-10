@@ -13,9 +13,38 @@ Optionale Schritte wie GitHub Actions sind ebenfalls erwähnt.
 == Voraussetzungen
 NOTE: *Installierte Software:*
 
-- `Minikube` und `kubectl`
-- Docker
-- Ein GitHub-Repository für das Projekt
+- `Minikube`
+
+https://minikube.sigs.k8s.io/docs/start/[MiniKube Installation]
+
+- `kubectl`
+
+https://kubernetes.io/docs/tasks/tools/#kubectl[kubectl Installation]
+
+- `Docker`
+- Ein `GitHub-Repository` für das Projekt
+- `Leocloud`
+
+* für Linux-User:
+
+[source, shell]
+----
+bash -c "$(curl -fsSL https://cloud.htl-leonding.ac.at/html/install.sh)"
+----
+
+* für Windows-User:
+
+1. Ubuntu für Windows installieren
+2. Dann diesen Befehl ausführen:
+
+[source, shell]
+----
+sudo apt update && sudo apt full-upgrade
+# restart Ubuntu mit wsl --shutdown (Powershell)
+sudo do-release-upgrade
+----
+
+* Dann die Leocloud installieren wie im Schritt für Linux-User.
 
 == Schritte für das Deployment in Minikube
 
@@ -28,7 +57,7 @@ image::images/deployment.drawio.png[Deployment in Minikube]
 5. Das Docker-Image in Minikube deployen.
 6. Optional: GitHub Actions für automatisches Deployment einrichten.
 
-== Quarkus-Projekt herunterladen
+== Quarkus-Projekt erstellen
 
 image::images/step1_deployment.drawio.png[Quarkus-Projekt erstellen]
 
@@ -36,9 +65,9 @@ Lade dir das Projekt unter diesem Link herunter und builde es.
 
 NOTE: link:/home/laurent/Dokumente/Referat/01-referate-LaurentMali/minikube-pvc.zip[Minikube-Projekt]
 
-Entpacke das Projekt und dann kann der Spaß anfangen
+Entpacke das Projekt und dann kann der Spaß anfangen 😉
 
-== Datenbank hinzufügen
+=== Datenbank hinzufügen
 
 Führe folgenden Befehl aus, um die Datenbank zu erstellen:
 
@@ -80,11 +109,11 @@ Nach all diesen Schritten sollte die Tabelle erfolgreich erstellt worden sein.
 
 image::images/database.png[Datenbank]
 
-== Minikube starten
+=== Minikube starten
 
 IMPORTANT: Starte Minikube mit dem Befehl `minikube start`.
 
-== Uber-JAR erstellen
+=== Uber-JAR erstellen
 
 image::images/step3_deployment.drawio.png[Uber-JAR erstellen]
 
@@ -102,7 +131,7 @@ Erstelle nun das Uber-JAR mit dem Befehl `./mvnw clean package`.
 
 Das Uber-JAR befindet sich im `target`-Ordner.
 
-== Dockerfile erstellen
+=== Dockerfile erstellen
 
 Im Ordner `minikube/src/main/docker` erstellen wir ein Dockerfile.
 
@@ -137,7 +166,7 @@ Diesen kann man unter dem Pfad `Settings -> Developer settings -> Personal acces
 
 image::images/docker-build-command-2.png[GitHub Container Registry]
 
-== build.sh-File
+=== build.sh-File
 
 image::images/step4_deployment.drawio.png[Docker-Image]
 
@@ -152,7 +181,7 @@ docker build --tag ghcr.io/$GITHUB_REPOSITORY/backend:latest ./target
 docker push ghcr.io/$GITHUB_REPOSITORY/backend:latest
 ----
 
-== Github-Workflow erstellen
+=== Github-Workflow erstellen
 
 * Ganz oben im root-Verzeichnis befindet sich der Ordner `.github/workflows`.
 * Dort erstellen wir das `build.yaml`-File für die Github Actions.
@@ -197,7 +226,7 @@ jobs:
 
 * Commiten, pushen und nun können wir in Github im Tab *Actions* überprüfen, ob das Docker-Image gebaut wurde.
 
-== Package public machen
+=== Package public machen
 
 Wir müssen das Package public machen, damit wir es in Minikube deployen können und uns viele Schritte vereinfachen können.
 
@@ -308,7 +337,7 @@ minikube dashboard
 
 image::images/running_pods_minikube.png[Pods in Minikube]
 
-== Port Forwarding von Minikube
+=== Port Forwarding von Minikube
 
 image::images/step7_deployment.drawio.png[Port Forwarding]
 
@@ -319,9 +348,10 @@ kubectl port-forward appsrv-xxxxxx-xxxxx 8080:8080 #<1>
 
 <1> Ersetze `appsrv-xxxxxx-xxxxx` durch den Namen des Pods.
 
-IMPORTANT: Der Name des Pods kann mit dem Befehl `kubectl get pods` herausgefunden werden.
+IMPORTANT: Der Name des Pods kann mit dem Befehl `kubectl get pods` oder im Tab *Pods* im Minikube-Dashboard
+herausgefunden werden
 
-== Den Endpoint abrufen
+=== Den Endpoint abrufen
 
 [source,shell]
 ----
@@ -352,7 +382,7 @@ image::images/auth_login.png[Auth-Login]
 
 Hier melden wir uns mit dem IF-Schulaccount an.
 
-== Dashboard installieren
+=== Dashboard installieren
 
 Installiere das Kubernetes Dashboard mit dem Befehl `leocloud get template dashboard | kubectl apply -f -`.
 
@@ -360,13 +390,13 @@ Wenn alles erfolgreich war, sollte folgende Meldung erscheinen:
 
 image::images/anmeldung_erfolgreich.png[Anmeldung erfolgreich]
 
-== Bearer-Token erstellen
+=== Bearer-Token erstellen
 
 Erstelle ein Bearer-Token mit dem Befehl `kubectl create token ifXXXXXX`, um Zugriff auf das Dashboard zu erhalten.
 
 IMPORTANT: Speichere den generierten Token sicher, da es zur Authentifizierung später benötigt wird.
 
-== Dashboard forwarden
+=== Dashboard forwarden
 
 Richte Port-Forwarding für das Dashboard ein:
 
@@ -375,7 +405,7 @@ Richte Port-Forwarding für das Dashboard ein:
 kubectl port-forward svc/dashboard 8000:8000
 ----
 
-== Dashboard öffnen
+=== Dashboard öffnen
 
 Öffne das Dashboard im Browser mit der URL:
 
@@ -388,7 +418,7 @@ http://localhost:8000/#/workloads?namespace=student-ifXXXXXX #<1>
 
 WARNING: Meistens muss man den Link zweimal öffnen!
 
-== Zugriff auf Projekt
+=== Zugriff auf Projekt
 
 Der Zugriff auf das Projekt erfolgt über folgende URL:
 
@@ -402,7 +432,7 @@ Ein Beispiel wie man auf den Endpoint gelangt sieht man im unteren Bild:
 
 image::images/Cloud_URL.png[Cloud-URL]
 
-== Dashboard entfernen
+=== Dashboard entfernen
 
 Entferne das Dashboard mit dem Befehl `leocloud delete template dashboard | kubectl delete -f -`.
 

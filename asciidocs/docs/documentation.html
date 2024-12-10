@@ -785,31 +785,40 @@ pre.rouge {
 <ul class="sectlevel1">
 <li><a href="#_voraussetzungen">1. Voraussetzungen</a></li>
 <li><a href="#_schritte_für_das_deployment_in_minikube">2. Schritte für das Deployment in Minikube</a></li>
-<li><a href="#_quarkus_projekt_herunterladen">3. Quarkus-Projekt herunterladen</a></li>
-<li><a href="#_datenbank_hinzufügen">4. Datenbank hinzufügen</a></li>
-<li><a href="#_minikube_starten">5. Minikube starten</a></li>
-<li><a href="#_uber_jar_erstellen">6. Uber-JAR erstellen</a></li>
-<li><a href="#_dockerfile_erstellen">7. Dockerfile erstellen</a></li>
-<li><a href="#_github_token_zum_anmelden">8. Github-Token zum Anmelden</a></li>
-<li><a href="#_build_sh_file">9. build.sh-File</a></li>
-<li><a href="#_github_workflow_erstellen">10. Github-Workflow erstellen</a></li>
-<li><a href="#_package_public_machen">11. Package public machen</a></li>
-<li><a href="#_konfiguration_für_das_deployment_in_minikube">12. Konfiguration für das Deployment in Minikube</a></li>
-<li><a href="#_deployment_in_minikube">13. Deployment in Minikube</a>
+<li><a href="#_quarkus_projekt_erstellen">3. Quarkus-Projekt erstellen</a>
 <ul class="sectlevel2">
-<li><a href="#_minikube_dashboard_zum_überprüfen">13.1. Minikube Dashboard zum Überprüfen</a></li>
+<li><a href="#_datenbank_hinzufügen">3.1. Datenbank hinzufügen</a></li>
+<li><a href="#_minikube_starten">3.2. Minikube starten</a></li>
+<li><a href="#_uber_jar_erstellen">3.3. Uber-JAR erstellen</a></li>
+<li><a href="#_dockerfile_erstellen">3.4. Dockerfile erstellen</a></li>
 </ul>
 </li>
-<li><a href="#_port_forwarding_von_minikube">14. Port Forwarding von Minikube</a></li>
-<li><a href="#_den_endpoint_abrufen">15. Den Endpoint abrufen</a></li>
-<li><a href="#_deployment_in_die_leocloud">16. Deployment in die LeoCloud</a></li>
-<li><a href="#_dashboard_installieren">17. Dashboard installieren</a></li>
-<li><a href="#_bearer_token_erstellen">18. Bearer-Token erstellen</a></li>
-<li><a href="#_dashboard_forwarden">19. Dashboard forwarden</a></li>
-<li><a href="#_dashboard_öffnen">20. Dashboard öffnen</a></li>
-<li><a href="#_zugriff_auf_projekt">21. Zugriff auf Projekt</a></li>
-<li><a href="#_dashboard_entfernen">22. Dashboard entfernen</a></li>
-<li><a href="#_fazit">23. Fazit</a></li>
+<li><a href="#_github_token_zum_anmelden">4. Github-Token zum Anmelden</a>
+<ul class="sectlevel2">
+<li><a href="#_build_sh_file">4.1. build.sh-File</a></li>
+<li><a href="#_github_workflow_erstellen">4.2. Github-Workflow erstellen</a></li>
+<li><a href="#_package_public_machen">4.3. Package public machen</a></li>
+</ul>
+</li>
+<li><a href="#_konfiguration_für_das_deployment_in_minikube">5. Konfiguration für das Deployment in Minikube</a></li>
+<li><a href="#_deployment_in_minikube">6. Deployment in Minikube</a>
+<ul class="sectlevel2">
+<li><a href="#_minikube_dashboard_zum_überprüfen">6.1. Minikube Dashboard zum Überprüfen</a></li>
+<li><a href="#_port_forwarding_von_minikube">6.2. Port Forwarding von Minikube</a></li>
+<li><a href="#_den_endpoint_abrufen">6.3. Den Endpoint abrufen</a></li>
+</ul>
+</li>
+<li><a href="#_deployment_in_die_leocloud">7. Deployment in die LeoCloud</a>
+<ul class="sectlevel2">
+<li><a href="#_dashboard_installieren">7.1. Dashboard installieren</a></li>
+<li><a href="#_bearer_token_erstellen">7.2. Bearer-Token erstellen</a></li>
+<li><a href="#_dashboard_forwarden">7.3. Dashboard forwarden</a></li>
+<li><a href="#_dashboard_öffnen">7.4. Dashboard öffnen</a></li>
+<li><a href="#_zugriff_auf_projekt">7.5. Zugriff auf Projekt</a></li>
+<li><a href="#_dashboard_entfernen">7.6. Dashboard entfernen</a></li>
+</ul>
+</li>
+<li><a href="#_fazit">8. Fazit</a></li>
 </ul>
 </div>
 </div>
@@ -840,13 +849,76 @@ Optionale Schritte wie GitHub Actions sind ebenfalls erwähnt.</p>
 <div class="ulist">
 <ul>
 <li>
-<p><code>Minikube</code> und <code>kubectl</code></p>
+<p><code>Minikube</code></p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p><a href="https://minikube.sigs.k8s.io/docs/start/">MiniKube Installation</a></p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>kubectl</code></p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p><a href="https://kubernetes.io/docs/tasks/tools/#kubectl">kubectl Installation</a></p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>Docker</code></p>
 </li>
 <li>
-<p>Docker</p>
+<p>Ein <code>GitHub-Repository</code> für das Projekt</p>
 </li>
 <li>
-<p>Ein GitHub-Repository für das Projekt</p>
+<p><code>Leocloud</code></p>
+<div class="ulist">
+<ul>
+<li>
+<p>für Linux-User:</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="shell">bash <span class="nt">-c</span> <span class="s2">"</span><span class="si">$(</span>curl <span class="nt">-fsSL</span> https://cloud.htl-leonding.ac.at/html/install.sh<span class="si">)</span><span class="s2">"</span></code></pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>für Windows-User:</p>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Ubuntu für Windows installieren</p>
+</li>
+<li>
+<p>Dann diesen Befehl ausführen:</p>
+</li>
+</ol>
+</div>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="shell"><span class="nb">sudo </span>apt update <span class="o">&amp;&amp;</span> <span class="nb">sudo </span>apt full-upgrade
+<span class="c"># restart Ubuntu mit wsl --shutdown (Powershell)</span>
+<span class="nb">sudo </span><span class="k">do</span><span class="nt">-release-upgrade</span></code></pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Dann die Leocloud installieren wie im Schritt für Linux-User.</p>
 </li>
 </ul>
 </div>
@@ -885,7 +957,7 @@ Optionale Schritte wie GitHub Actions sind ebenfalls erwähnt.</p>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_quarkus_projekt_herunterladen">3. Quarkus-Projekt herunterladen</h2>
+<h2 id="_quarkus_projekt_erstellen">3. Quarkus-Projekt erstellen</h2>
 <div class="sectionbody">
 <div class="imageblock">
 <div class="content">
@@ -908,13 +980,10 @@ Optionale Schritte wie GitHub Actions sind ebenfalls erwähnt.</p>
 </table>
 </div>
 <div class="paragraph">
-<p>Entpacke das Projekt und dann kann der Spaß anfangen</p>
+<p>Entpacke das Projekt und dann kann der Spaß anfangen 😉</p>
 </div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_datenbank_hinzufügen">4. Datenbank hinzufügen</h2>
-<div class="sectionbody">
+<div class="sect2">
+<h3 id="_datenbank_hinzufügen">3.1. Datenbank hinzufügen</h3>
 <div class="paragraph">
 <p>Führe folgenden Befehl aus, um die Datenbank zu erstellen:</p>
 </div>
@@ -970,10 +1039,8 @@ quarkus.hibernate-orm.sql-load-script<span class="o">=</span>import.sql</code></
 </div>
 </div>
 </div>
-</div>
-<div class="sect1">
-<h2 id="_minikube_starten">5. Minikube starten</h2>
-<div class="sectionbody">
+<div class="sect2">
+<h3 id="_minikube_starten">3.2. Minikube starten</h3>
 <div class="admonitionblock important">
 <table>
 <tr>
@@ -987,10 +1054,8 @@ Starte Minikube mit dem Befehl <code>minikube start</code>.
 </table>
 </div>
 </div>
-</div>
-<div class="sect1">
-<h2 id="_uber_jar_erstellen">6. Uber-JAR erstellen</h2>
-<div class="sectionbody">
+<div class="sect2">
+<h3 id="_uber_jar_erstellen">3.3. Uber-JAR erstellen</h3>
 <div class="imageblock">
 <div class="content">
 <img src="images/step3_deployment.drawio.png" alt="Uber-JAR erstellen">
@@ -1031,10 +1096,8 @@ Wir nehmen ein Uber-JAR, und kein normales JAR, sodass alle Abhängigkeiten enth
 <p>Das Uber-JAR befindet sich im <code>target</code>-Ordner.</p>
 </div>
 </div>
-</div>
-<div class="sect1">
-<h2 id="_dockerfile_erstellen">7. Dockerfile erstellen</h2>
-<div class="sectionbody">
+<div class="sect2">
+<h3 id="_dockerfile_erstellen">3.4. Dockerfile erstellen</h3>
 <div class="paragraph">
 <p>Im Ordner <code>minikube/src/main/docker</code> erstellen wir ein Dockerfile.</p>
 </div>
@@ -1066,8 +1129,9 @@ CMD <span class="o">[</span> <span class="s2">"java"</span>, <span class="s2">"-
 </div>
 </div>
 </div>
+</div>
 <div class="sect1">
-<h2 id="_github_token_zum_anmelden">8. Github-Token zum Anmelden</h2>
+<h2 id="_github_token_zum_anmelden">4. Github-Token zum Anmelden</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>Bevor wir das Docker-Image in die GitHub Container Registry pushen können, benötigen wir einen GitHub-Token für die Anmeldung.</p>
@@ -1092,11 +1156,8 @@ Den Token aufbewahren, da dieser dann nicht mehr sichtbar ist.
 <img src="images/docker-build-command-2.png" alt="GitHub Container Registry">
 </div>
 </div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_build_sh_file">9. build.sh-File</h2>
-<div class="sectionbody">
+<div class="sect2">
+<h3 id="_build_sh_file">4.1. build.sh-File</h3>
 <div class="imageblock">
 <div class="content">
 <img src="images/step4_deployment.drawio.png" alt="Docker-Image">
@@ -1119,10 +1180,8 @@ docker push ghcr.io/<span class="nv">$GITHUB_REPOSITORY</span>/backend:latest</c
 </div>
 </div>
 </div>
-</div>
-<div class="sect1">
-<h2 id="_github_workflow_erstellen">10. Github-Workflow erstellen</h2>
-<div class="sectionbody">
+<div class="sect2">
+<h3 id="_github_workflow_erstellen">4.2. Github-Workflow erstellen</h3>
 <div class="ulist">
 <ul>
 <li>
@@ -1179,10 +1238,8 @@ docker push ghcr.io/<span class="nv">$GITHUB_REPOSITORY</span>/backend:latest</c
 </ul>
 </div>
 </div>
-</div>
-<div class="sect1">
-<h2 id="_package_public_machen">11. Package public machen</h2>
-<div class="sectionbody">
+<div class="sect2">
+<h3 id="_package_public_machen">4.3. Package public machen</h3>
 <div class="paragraph">
 <p>Wir müssen das Package public machen, damit wir es in Minikube deployen können und uns viele Schritte vereinfachen können.</p>
 </div>
@@ -1207,8 +1264,9 @@ docker push ghcr.io/<span class="nv">$GITHUB_REPOSITORY</span>/backend:latest</c
 </div>
 </div>
 </div>
+</div>
 <div class="sect1">
-<h2 id="_konfiguration_für_das_deployment_in_minikube">12. Konfiguration für das Deployment in Minikube</h2>
+<h2 id="_konfiguration_für_das_deployment_in_minikube">5. Konfiguration für das Deployment in Minikube</h2>
 <div class="sectionbody">
 <div class="ulist">
 <ul>
@@ -1307,7 +1365,7 @@ docker push ghcr.io/<span class="nv">$GITHUB_REPOSITORY</span>/backend:latest</c
 </div>
 </div>
 <div class="sect1">
-<h2 id="_deployment_in_minikube">13. Deployment in Minikube</h2>
+<h2 id="_deployment_in_minikube">6. Deployment in Minikube</h2>
 <div class="sectionbody">
 <div class="imageblock">
 <div class="content">
@@ -1321,7 +1379,7 @@ kubectl apply <span class="nt">-f</span> k8s/appsrv.yaml</code></pre>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_minikube_dashboard_zum_überprüfen">13.1. Minikube Dashboard zum Überprüfen</h3>
+<h3 id="_minikube_dashboard_zum_überprüfen">6.1. Minikube Dashboard zum Überprüfen</h3>
 <div class="listingblock">
 <div class="content">
 <pre class="rouge highlight"><code data-lang="shell">minikube dashboard</code></pre>
@@ -1333,11 +1391,8 @@ kubectl apply <span class="nt">-f</span> k8s/appsrv.yaml</code></pre>
 </div>
 </div>
 </div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_port_forwarding_von_minikube">14. Port Forwarding von Minikube</h2>
-<div class="sectionbody">
+<div class="sect2">
+<h3 id="_port_forwarding_von_minikube">6.2. Port Forwarding von Minikube</h3>
 <div class="imageblock">
 <div class="content">
 <img src="images/step7_deployment.drawio.png" alt="Port Forwarding">
@@ -1363,16 +1418,15 @@ kubectl apply <span class="nt">-f</span> k8s/appsrv.yaml</code></pre>
 <i class="fa icon-important" title="Important"></i>
 </td>
 <td class="content">
-Der Name des Pods kann mit dem Befehl <code>kubectl get pods</code> herausgefunden werden.
+Der Name des Pods kann mit dem Befehl <code>kubectl get pods</code> oder im Tab <strong>Pods</strong> im Minikube-Dashboard
+herausgefunden werden
 </td>
 </tr>
 </table>
 </div>
 </div>
-</div>
-<div class="sect1">
-<h2 id="_den_endpoint_abrufen">15. Den Endpoint abrufen</h2>
-<div class="sectionbody">
+<div class="sect2">
+<h3 id="_den_endpoint_abrufen">6.3. Den Endpoint abrufen</h3>
 <div class="listingblock">
 <div class="content">
 <pre class="rouge highlight"><code data-lang="shell">curl http://localhost:8080/api/vehicle</code></pre>
@@ -1385,8 +1439,9 @@ Der Name des Pods kann mit dem Befehl <code>kubectl get pods</code> herausgefund
 </div>
 </div>
 </div>
+</div>
 <div class="sect1">
-<h2 id="_deployment_in_die_leocloud">16. Deployment in die LeoCloud</h2>
+<h2 id="_deployment_in_die_leocloud">7. Deployment in die LeoCloud</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>Wir haben nun das Projekt in Minikube zum Laufen gebracht und können es nun in die LeoCloud deployen.</p>
@@ -1432,11 +1487,8 @@ kubectl apply <span class="nt">-f</span> postgres.yaml</code></pre>
 <div class="paragraph">
 <p>Hier melden wir uns mit dem IF-Schulaccount an.</p>
 </div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_dashboard_installieren">17. Dashboard installieren</h2>
-<div class="sectionbody">
+<div class="sect2">
+<h3 id="_dashboard_installieren">7.1. Dashboard installieren</h3>
 <div class="paragraph">
 <p>Installiere das Kubernetes Dashboard mit dem Befehl <code>leocloud get template dashboard | kubectl apply -f -</code>.</p>
 </div>
@@ -1449,10 +1501,8 @@ kubectl apply <span class="nt">-f</span> postgres.yaml</code></pre>
 </div>
 </div>
 </div>
-</div>
-<div class="sect1">
-<h2 id="_bearer_token_erstellen">18. Bearer-Token erstellen</h2>
-<div class="sectionbody">
+<div class="sect2">
+<h3 id="_bearer_token_erstellen">7.2. Bearer-Token erstellen</h3>
 <div class="paragraph">
 <p>Erstelle ein Bearer-Token mit dem Befehl <code>kubectl create token ifXXXXXX</code>, um Zugriff auf das Dashboard zu erhalten.</p>
 </div>
@@ -1469,10 +1519,8 @@ Speichere den generierten Token sicher, da es zur Authentifizierung später ben�
 </table>
 </div>
 </div>
-</div>
-<div class="sect1">
-<h2 id="_dashboard_forwarden">19. Dashboard forwarden</h2>
-<div class="sectionbody">
+<div class="sect2">
+<h3 id="_dashboard_forwarden">7.3. Dashboard forwarden</h3>
 <div class="paragraph">
 <p>Richte Port-Forwarding für das Dashboard ein:</p>
 </div>
@@ -1482,10 +1530,8 @@ Speichere den generierten Token sicher, da es zur Authentifizierung später ben�
 </div>
 </div>
 </div>
-</div>
-<div class="sect1">
-<h2 id="_dashboard_öffnen">20. Dashboard öffnen</h2>
-<div class="sectionbody">
+<div class="sect2">
+<h3 id="_dashboard_öffnen">7.4. Dashboard öffnen</h3>
 <div class="paragraph">
 <p>Öffne das Dashboard im Browser mit der URL:</p>
 </div>
@@ -1515,10 +1561,8 @@ Meistens muss man den Link zweimal öffnen!
 </table>
 </div>
 </div>
-</div>
-<div class="sect1">
-<h2 id="_zugriff_auf_projekt">21. Zugriff auf Projekt</h2>
-<div class="sectionbody">
+<div class="sect2">
+<h3 id="_zugriff_auf_projekt">7.5. Zugriff auf Projekt</h3>
 <div class="paragraph">
 <p>Der Zugriff auf das Projekt erfolgt über folgende URL:</p>
 </div>
@@ -1549,17 +1593,16 @@ Ersetze <code>ifXXXXXX</code> durch deinen IF-Schulaccount.
 </div>
 </div>
 </div>
-</div>
-<div class="sect1">
-<h2 id="_dashboard_entfernen">22. Dashboard entfernen</h2>
-<div class="sectionbody">
+<div class="sect2">
+<h3 id="_dashboard_entfernen">7.6. Dashboard entfernen</h3>
 <div class="paragraph">
 <p>Entferne das Dashboard mit dem Befehl <code>leocloud delete template dashboard | kubectl delete -f -</code>.</p>
 </div>
 </div>
 </div>
+</div>
 <div class="sect1">
-<h2 id="_fazit">23. Fazit</h2>
+<h2 id="_fazit">8. Fazit</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>Das Kubernetes Dashboard bietet eine einfache Möglichkeit, Ressourcen und Workloads in deinem Namespace zu überwachen und zu verwalten.</p>
@@ -1570,7 +1613,7 @@ Ersetze <code>ifXXXXXX</code> durch deinen IF-Schulaccount.
 <div id="footer">
 <div id="footer-text">
 Version 1.0<br>
-Last updated 2024-12-10 10:22:38 +0100
+Last updated 2024-12-10 13:39:31 +0100
 </div>
 </div>
 <script>
