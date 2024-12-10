@@ -1,7 +1,11 @@
 = Quarkus-Projekt in Kubernetes mit Minikube und in LeoCloud deployen
+Laurent Mali
+1.0, {docdate}
 :icons: font
-:toc:
-:toclevels: 2
+:sectnums:    // Nummerierung der Überschriften
+:toc: left
+:source-highlighter: rouge
+:docinfo: shared
 
 Dieses Tutorial zeigt Schritt für Schritt, wie ein Quarkus-Projekt in Kubernetes mithilfe von Docker mit Minikube und in LeoCloud deployed wird.
 Optionale Schritte wie GitHub Actions sind ebenfalls erwähnt.
@@ -13,72 +17,86 @@ NOTE: *Installierte Software:*
 - Docker
 - Ein GitHub-Repository für das Projekt
 
-== Überblick
-
-image::images/Overview-deployment.drawio.png[Overview]
-
 == Schritte für das Deployment in Minikube
 
 image::images/deployment.drawio.png[Deployment in Minikube]
 
-1. Als erstes ein Quarkus-Projekt mit einem simplen REST-Endpoint erstellen.
+1. Als Erstes ein Quarkus-Projekt mit einem simplen REST-Endpoint erstellen.
 2. Uber-JAR erstellen.
 3. Dockerfile erstellen.
 4. Docker-Image erstellen und in ghcr.io (GitHub Container Registry) pushen.
 5. Das Docker-Image in Minikube deployen.
 6. Optional: GitHub Actions für automatisches Deployment einrichten.
 
-== 1. Quarkus-Projekt erstellen
+== Quarkus-Projekt herunterladen
 
-[source, shell]
-----
-mvn io.quarkus:quarkus-maven-plugin
+image::images/step1_deployment.drawio.png[Quarkus-Projekt erstellen]
 
--DprojectGroupId=com.example
--DprojectArtifactId=backend
--DclassName="com.example.GreetingResource"
--Dpath="/hello"
-----
+Lade dir das Projekt unter diesem Link herunter und builde es.
 
-== 2. Datenbank hinzufügen
+NOTE: link:/home/laurent/Dokumente/Referat/01-referate-LaurentMali/minikube-pvc.zip[Minikube-Projekt]
 
-Führe folgenden Befehl aus um die Datenbank zu erstellen:
+Entpacke das Projekt und dann kann der Spaß anfangen
+
+== Datenbank hinzufügen
+
+Führe folgenden Befehl aus, um die Datenbank zu erstellen:
 
 [source, shell]
 ----
 ./postgres-create-db.sh
 ----
 
-Um die Datenbank zu starten führe diesen Befehl aus:
+Um die Datenbank zu starten, führe diesen Befehl aus:
 
 [source, shell]
 ----
 ./postgres-start.sh
 ----
 
-* In den application.properties findet man den Username, das Passwort und die URL der Datenbank.
+* In den application.properties findet man den Username, das Passwort und die URL der Datenbank, die man für die
+Datenbankanbindung benötigt.
 
-== 3. Minikube starten
+*application.properties*
+[source, shell]
+----
+# datasource configuration
+quarkus.datasource.db-kind = postgresql
+quarkus.datasource.username = demo
+quarkus.datasource.password = demo
+quarkus.datasource.jdbc.url = jdbc:postgresql://localhost:5432/demo
+%prod.quarkus.datasource.jdbc.url = jdbc:postgresql://postgres:5432/demo
+
+# drop and create the database at startup (use `update` to only update the schema)
+quarkus.hibernate-orm.database.generation=drop-and-create
+
+quarkus.package.jar.type=uber-jar
+quarkus.hibernate-orm.sql-load-script=import.sql
+----
+
+== Minikube starten
 
 IMPORTANT: Starte Minikube mit dem Befehl `minikube start`.
 
-== 4. Uber-JAR erstellen
+== Uber-JAR erstellen
 
-Nun "verpacken" wir das Projekt, um es ausführbar zu machen.
+image::images/step3_deployment.drawio.png[Uber-JAR erstellen]
 
-* Wir nehmen ein Uber-JAR, und kein normales JAR, sodass alle Abhängigkeiten enthalten sind.
+Nun "verpacken" wir das Projekt in ein Uber-Jar, um es ausführbar zu machen.
 
-In den application.properties fügen wir folgendes hinzu um es als Uber-JAR zu erstellen:
+IMPORTANT: Wir nehmen ein Uber-JAR, und kein normales JAR, sodass alle Abhängigkeiten enthalten sind.
+
+In den application.properties fügen wir Folgendes hinzu, um es als Uber-JAR zu erstellen:
 
 * application.properties befinden sich in folgendem Pfad: `minikube/src/main/resources/application.properties`
 
 * `quarkus.package.type=uber-jar`
 
-Erstelle nun das Uber-JAR mit dem Befehl `mvn package`.
+Erstelle nun das Uber-JAR mit dem Befehl `./mvnw clean package`.
 
 Das Uber-JAR befindet sich im `target`-Ordner.
 
-== 5. Dockerfile erstellen
+== Dockerfile erstellen
 
 Im Ordner `minikube/src/main/docker` erstellen wir ein Dockerfile.
 
@@ -99,28 +117,23 @@ Nun kopieren wir die Dockerfile-Vorlage ins `target`-Verzeichnis.
 cp src/main/docker/Dockerfile target/
 ----
 
-Baue das Docker-Image mit dem Befehl `docker build --tag ghcr.io/$GITHUB_REPOSITORY/backend`.
+Das target-Verzeichnis sollte nach all diesen Schritten wie folgt aussehen:
 
-== 6. Image zu GitHub Container Registry pushen
-: *Docker-Image hochladen*
+image::images/target.png[Target-Verzeichnis]
 
-IMPORTANT: Melde dich bei der GitHub Container Registry an:
+== Github-Token zum Anmelden
 
-[source, shell]
-----
-docker login ghcr.io -u $GITHUB_ACTOR -p $GITHUB_TOKEN
-----
+Bevor wir das Docker-Image in die GitHub Container Registry pushen können, benötigen wir einen GitHub-Token für die Anmeldung.
 
-Push das Docker-Image in die GitHub Container Registry:
+IMPORTANT: Den Token aufbewahren, da dieser dann nicht mehr sichtbar ist.
 
-[source, shell]
-----
-docker push ghcr.io/$GITHUB_REPOSITORY/backend
-----
+Diesen kann man unter dem Pfad `Settings -> Developer settings -> Personal access tokens -> Generate new Token` erstellen.
 
 image::images/docker-build-command-2.png[GitHub Container Registry]
 
-== 7. build.sh-File
+== build.sh-File
+
+image::images/step4_deployment.drawio.png[Docker-Image]
 
 * Wir erstellen dieses File um nicht alles einzeln ins Terminal eingeben zu müssen.
 
@@ -133,15 +146,15 @@ docker build --tag ghcr.io/$GITHUB_REPOSITORY/backend:latest ./target
 docker push ghcr.io/$GITHUB_REPOSITORY/backend:latest
 ----
 
-== 8. Deployment in Minikube
+== Deployment in Minikube
+
+image::images/step6_deployment.drawio.png[Deployment in Minikube]
 
 * Ganz oben im root-Verzeichnis befindet sich der Ordner `.github/workflows`.
-* Dort erstellen wir das `build.yaml`-File.
+* Dort erstellen wir das `build.yaml`-File für die Github Actions.
 
 [source, yaml]
 ----
-
-
 name: Build and Deploy Dockerfiles
 run-name: ${{ github.actor }} is building Docker images 🚀
 on: [ push ]
@@ -178,26 +191,24 @@ jobs:
         run: ./build.sh
 ----
 
-* Commiten, pushen und nun können wir in Github überprüfen ob das Docker-Image gebaut wurde.
+* Commiten, pushen und nun können wir in Github im Tab *Actions* überprüfen, ob das Docker-Image gebaut wurde.
 
-== 9. Package public machen
+== Package public machen
 
 Wir müssen das Package public machen, damit wir es in Minikube deployen können und uns viele Schritte vereinfachen können.
 
 1. Wir klicken auf unseren User und gehen in den Tab *Packages*.
-2. Dort sehen wir das erstellte Package und klicken drauf.
-3. Rechts sehen wir *Package settings* und klicken drauf.
+2. Dort sehen wir das erstellte Package und klicken darauf.
+3. Rechts sehen wir *Package settings* und klicken darauf.
 4. Dort sehen wir *Change package visibility* und klicken auf *Change visibility*.
 5. Wir wählen *Public* und klicken auf *Change visibility*.
 
-== 10. Konfiguration für das Deployment in Minikube
+== Konfiguration für das Deployment in Minikube
 
 * Die Konfigurationsdatei befindet sich in `minikube/k8s/appsrv.yaml`.
 
 [source, yaml]
 ----
-
-
 # Quarkus Application Server
 apiVersion: apps/v1
 kind: Deployment
@@ -246,11 +257,35 @@ spec:
       protocol: TCP
   selector:
     app: appsrv
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: appsrv-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/enable-cors: "true"
+    nginx.ingress.kubernetes.io/cors-allow-methods: "PUT, GET, POST, OPTIONS, DELETE"
+    # if the exposed path doesn't match backend path
+    # INGRESS.kubernetes.io/rewrite-target: /
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: ifXXXXXX.cloud.htl-leonding.ac.at #<2>
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: appsrv
+                port:
+                  number: 8080
 ----
 
 <1> Der Image-Name muss angepasst werden.
+<2> Ersetze `ifXXXXXX` durch deinen IF-Schulaccount.
 
-== 11. Deployment in Minikube
+== Deployment in Minikube
 
 [source,shell]
 ----
@@ -258,32 +293,42 @@ kubectl apply -f k8s/postgres.yaml
 kubectl apply -f k8s/appsrv.yaml
 ----
 
-== 11.1 Minikube Dashboard zum Überprüfen
+=== Minikube Dashboard zum Überprüfen
 
 [source,shell]
 ----
 minikube dashboard
 ----
 
-== 12. Port Forwarding von Minikube
+image::images/running_pods_minikube.png[Pods in Minikube]
+
+== Port Forwarding von Minikube
+
+image::images/step7_deployment.drawio.png[Port Forwarding]
 
 [source,shell]
 ----
-kubectl port-forward appsrv-xxxxxx-xxxxx 8080:8080
+kubectl port-forward appsrv-xxxxxx-xxxxx 8080:8080 #<1>
 ----
 
-== 13. In die Applikation "einloggen"
+<1> Ersetze `appsrv-xxxxxx-xxxxx` durch den Namen des Pods.
+
+IMPORTANT: Der Name des Pods kann mit dem Befehl `kubectl get pods` herausgefunden werden.
+
+== Den Endpoint abrufen
 
 [source,shell]
 ----
 curl http://localhost:8080/api/vehicle
 ----
 
-== 14. Deployment in LeoCloud
+image::images/db_on_localhost.png[Ergebnis]
 
-Wir haben nun das Projekt in Minikube deployed und können es nun in LeoCloud deployen.
+== Deployment in die LeoCloud
 
-WARNING: Der erste Schritt ist das löschen der Config-Datei im .kube-Ordner, da diese nicht überschrieben werden kann.
+Wir haben nun das Projekt in Minikube zum Laufen gebracht und können es nun in die LeoCloud deployen.
+
+WARNING: Der erste Schritt ist das Löschen der Config-Datei im .kube-Ordner, da diese nicht überschrieben werden kann.
 
 image::images/Bildschirmfoto vom 2024-11-19 10-13-59.png[]
 
@@ -295,17 +340,27 @@ kubectl apply -f appsrv.yaml
 kubectl apply -f postgres.yaml
 ----
 
-== 15. Dashboard installieren
+Nun müssen wir das neue Config-File erstellen und machen das mit dem Befehl `leocloud auth login`.
+
+image::images/auth_login.png[Auth-Login]
+
+Hier melden wir uns mit dem IF-Schulaccount an.
+
+== Dashboard installieren
 
 Installiere das Kubernetes Dashboard mit dem Befehl `leocloud get template dashboard | kubectl apply -f -`.
 
-== 16. Bearer-Token erstellen
+Wenn alles erfolgreich war, sollte folgende Meldung erscheinen:
 
-Erstelle ein Bearer-Token mit dem Befehl `leocloud create token`, um Zugriff auf das Dashboard zu erhalten.
+image::images/anmeldung_erfolgreich.png[Anmeldung erfolgreich]
+
+== Bearer-Token erstellen
+
+Erstelle ein Bearer-Token mit dem Befehl `kubectl create token ifXXXXXX`, um Zugriff auf das Dashboard zu erhalten.
 
 IMPORTANT: Speichere den generierten Token sicher, da es zur Authentifizierung später benötigt wird.
 
-== 17. Dashboard forwarden
+== Dashboard forwarden
 
 Richte Port-Forwarding für das Dashboard ein:
 
@@ -314,7 +369,7 @@ Richte Port-Forwarding für das Dashboard ein:
 kubectl port-forward svc/dashboard 8000:8000
 ----
 
-== 18. Dashboard öffnen
+== Dashboard öffnen
 
 Öffne das Dashboard im Browser mit der URL:
 
@@ -327,11 +382,25 @@ http://localhost:8000/#/workloads?namespace=student-ifXXXXXX #<1>
 
 WARNING: Meistens muss man den Link zweimal öffnen!
 
-== 19. Dashboard entfernen
+== Zugriff auf Projekt
+
+Der Zugriff auf das Projekt erfolgt über folgende URL:
+
+`ifXXXXXX.cloud.htl-leonding.ac.at`
+
+IMPORTANT: Ersetze `ifXXXXXX` durch deinen IF-Schulaccount.
+
+Nun können andere Personen über diesen Link auf das Projekt "zugreifen".
+
+Ein Beispiel wie man auf den Endpoint gelangt sieht man im unteren Bild:
+
+image::images/Cloud_URL.png[Cloud-URL]
+
+== Dashboard entfernen
 
 Entferne das Dashboard mit dem Befehl `leocloud delete template dashboard | kubectl delete -f -`.
 
-== 20. Fazit
+== Fazit
 
 Das Kubernetes Dashboard bietet eine einfache Möglichkeit, Ressourcen und Workloads in deinem Namespace zu überwachen und zu verwalten.
 

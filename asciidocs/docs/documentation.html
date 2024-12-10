@@ -5,6 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="generator" content="Asciidoctor 2.0.23">
+<meta name="author" content="Laurent Mali">
 <title>Quarkus-Projekt in Kubernetes mit Minikube und in LeoCloud deployen</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
 <style>
@@ -435,6 +436,230 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </style>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <style>
+pre.rouge table td { padding: 5px; }
+pre.rouge table pre { margin: 0; }
+pre.rouge .cm {
+  color: #999988;
+  font-style: italic;
+}
+pre.rouge .cp {
+  color: #999999;
+  font-weight: bold;
+}
+pre.rouge .c1 {
+  color: #999988;
+  font-style: italic;
+}
+pre.rouge .cs {
+  color: #999999;
+  font-weight: bold;
+  font-style: italic;
+}
+pre.rouge .c, pre.rouge .ch, pre.rouge .cd, pre.rouge .cpf {
+  color: #999988;
+  font-style: italic;
+}
+pre.rouge .err {
+  color: #a61717;
+  background-color: #e3d2d2;
+}
+pre.rouge .gd {
+  color: #000000;
+  background-color: #ffdddd;
+}
+pre.rouge .ge {
+  color: #000000;
+  font-style: italic;
+}
+pre.rouge .gr {
+  color: #aa0000;
+}
+pre.rouge .gh {
+  color: #999999;
+}
+pre.rouge .gi {
+  color: #000000;
+  background-color: #ddffdd;
+}
+pre.rouge .go {
+  color: #888888;
+}
+pre.rouge .gp {
+  color: #555555;
+}
+pre.rouge .gs {
+  font-weight: bold;
+}
+pre.rouge .gu {
+  color: #aaaaaa;
+}
+pre.rouge .gt {
+  color: #aa0000;
+}
+pre.rouge .kc {
+  color: #000000;
+  font-weight: bold;
+}
+pre.rouge .kd {
+  color: #000000;
+  font-weight: bold;
+}
+pre.rouge .kn {
+  color: #000000;
+  font-weight: bold;
+}
+pre.rouge .kp {
+  color: #000000;
+  font-weight: bold;
+}
+pre.rouge .kr {
+  color: #000000;
+  font-weight: bold;
+}
+pre.rouge .kt {
+  color: #445588;
+  font-weight: bold;
+}
+pre.rouge .k, pre.rouge .kv {
+  color: #000000;
+  font-weight: bold;
+}
+pre.rouge .mf {
+  color: #009999;
+}
+pre.rouge .mh {
+  color: #009999;
+}
+pre.rouge .il {
+  color: #009999;
+}
+pre.rouge .mi {
+  color: #009999;
+}
+pre.rouge .mo {
+  color: #009999;
+}
+pre.rouge .m, pre.rouge .mb, pre.rouge .mx {
+  color: #009999;
+}
+pre.rouge .sa {
+  color: #000000;
+  font-weight: bold;
+}
+pre.rouge .sb {
+  color: #d14;
+}
+pre.rouge .sc {
+  color: #d14;
+}
+pre.rouge .sd {
+  color: #d14;
+}
+pre.rouge .s2 {
+  color: #d14;
+}
+pre.rouge .se {
+  color: #d14;
+}
+pre.rouge .sh {
+  color: #d14;
+}
+pre.rouge .si {
+  color: #d14;
+}
+pre.rouge .sx {
+  color: #d14;
+}
+pre.rouge .sr {
+  color: #009926;
+}
+pre.rouge .s1 {
+  color: #d14;
+}
+pre.rouge .ss {
+  color: #990073;
+}
+pre.rouge .s, pre.rouge .dl {
+  color: #d14;
+}
+pre.rouge .na {
+  color: #008080;
+}
+pre.rouge .bp {
+  color: #999999;
+}
+pre.rouge .nb {
+  color: #0086B3;
+}
+pre.rouge .nc {
+  color: #445588;
+  font-weight: bold;
+}
+pre.rouge .no {
+  color: #008080;
+}
+pre.rouge .nd {
+  color: #3c5d5d;
+  font-weight: bold;
+}
+pre.rouge .ni {
+  color: #800080;
+}
+pre.rouge .ne {
+  color: #990000;
+  font-weight: bold;
+}
+pre.rouge .nf, pre.rouge .fm {
+  color: #990000;
+  font-weight: bold;
+}
+pre.rouge .nl {
+  color: #990000;
+  font-weight: bold;
+}
+pre.rouge .nn {
+  color: #555555;
+}
+pre.rouge .nt {
+  color: #000080;
+}
+pre.rouge .vc {
+  color: #008080;
+}
+pre.rouge .vg {
+  color: #008080;
+}
+pre.rouge .vi {
+  color: #008080;
+}
+pre.rouge .nv, pre.rouge .vm {
+  color: #008080;
+}
+pre.rouge .ow {
+  color: #000000;
+  font-weight: bold;
+}
+pre.rouge .o {
+  color: #000000;
+  font-weight: bold;
+}
+pre.rouge .w {
+  color: #bbbbbb;
+}
+pre.rouge {
+  background-color: #f8f8f8;
+}
+</style>
+<style>
+    pre.rouge .hll {
+        background-color: #ffc;
+        display: block;
+    }
+    pre.rouge .hll * {
+        background-color: initial;
+    }
+</style>
+<style>
 /*! Asciidoctor Tabs | Copyright (c) 2018-present Dan Allen | MIT License */
 .tabs {
     margin-bottom: 1.25em;
@@ -547,36 +772,44 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 }
 </style>
 </head>
-<body class="article">
+<body class="article toc2 toc-left">
 <div id="header">
 <h1>Quarkus-Projekt in Kubernetes mit Minikube und in LeoCloud deployen</h1>
-<div id="toc" class="toc">
+<div class="details">
+<span id="author" class="author">Laurent Mali</span><br>
+<span id="revnumber">version 1.0,</span>
+<span id="revdate">2024-12-10</span>
+</div>
+<div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
 <ul class="sectlevel1">
-<li><a href="#_voraussetzungen">Voraussetzungen</a></li>
-<li><a href="#_überblick">Überblick</a></li>
-<li><a href="#_schritte_für_das_deployment_in_minikube">Schritte für das Deployment in Minikube</a></li>
-<li><a href="#_1_quarkus_projekt_erstellen">1. Quarkus-Projekt erstellen</a></li>
-<li><a href="#_2_datenbank_hinzufügen">2. Datenbank hinzufügen</a></li>
-<li><a href="#_3_minikube_starten">3. Minikube starten</a></li>
-<li><a href="#_4_uber_jar_erstellen">4. Uber-JAR erstellen</a></li>
-<li><a href="#_5_dockerfile_erstellen">5. Dockerfile erstellen</a></li>
-<li><a href="#_6_image_zu_github_container_registry_pushen">6. Image zu GitHub Container Registry pushen</a></li>
-<li><a href="#_7_build_sh_file">7. build.sh-File</a></li>
-<li><a href="#_8_deployment_in_minikube">8. Deployment in Minikube</a></li>
-<li><a href="#_9_package_public_machen">9. Package public machen</a></li>
-<li><a href="#_10_konfiguration_für_das_deployment_in_minikube">10. Konfiguration für das Deployment in Minikube</a></li>
-<li><a href="#_11_deployment_in_minikube">11. Deployment in Minikube</a></li>
-<li><a href="#_11_1_minikube_dashboard_zum_überprüfen">11.1 Minikube Dashboard zum Überprüfen</a></li>
-<li><a href="#_12_port_forwarding_von_minikube">12. Port Forwarding von Minikube</a></li>
-<li><a href="#_13_in_die_applikation_einloggen">13. In die Applikation "einloggen"</a></li>
-<li><a href="#_14_deployment_in_leocloud">14. Deployment in LeoCloud</a></li>
-<li><a href="#_15_dashboard_installieren">15. Dashboard installieren</a></li>
-<li><a href="#_16_bearer_token_erstellen">16. Bearer-Token erstellen</a></li>
-<li><a href="#_17_dashboard_forwarden">17. Dashboard forwarden</a></li>
-<li><a href="#_18_dashboard_öffnen">18. Dashboard öffnen</a></li>
-<li><a href="#_19_dashboard_entfernen">19. Dashboard entfernen</a></li>
-<li><a href="#_20_fazit">20. Fazit</a></li>
+<li><a href="#_voraussetzungen">1. Voraussetzungen</a></li>
+<li><a href="#_schritte_für_das_deployment_in_minikube">2. Schritte für das Deployment in Minikube</a></li>
+<li><a href="#_quarkus_projekt_herunterladen">3. Quarkus-Projekt herunterladen</a></li>
+<li><a href="#_datenbank_hinzufügen">4. Datenbank hinzufügen</a></li>
+<li><a href="#_minikube_starten">5. Minikube starten</a></li>
+<li><a href="#_uber_jar_erstellen">6. Uber-JAR erstellen</a></li>
+<li><a href="#_dockerfile_erstellen">7. Dockerfile erstellen</a></li>
+<li><a href="#_github_token_zum_anmelden">8. Github-Token zum Anmelden</a></li>
+<li><a href="#_build_sh_file">9. build.sh-File</a></li>
+<li><a href="#_deployment_in_minikube">10. Deployment in Minikube</a></li>
+<li><a href="#_package_public_machen">11. Package public machen</a></li>
+<li><a href="#_konfiguration_für_das_deployment_in_minikube">12. Konfiguration für das Deployment in Minikube</a></li>
+<li><a href="#_deployment_in_minikube_2">13. Deployment in Minikube</a>
+<ul class="sectlevel2">
+<li><a href="#_minikube_dashboard_zum_überprüfen">13.1. Minikube Dashboard zum Überprüfen</a></li>
+</ul>
+</li>
+<li><a href="#_port_forwarding_von_minikube">14. Port Forwarding von Minikube</a></li>
+<li><a href="#_den_endpoint_abrufen">15. Den Endpoint abrufen</a></li>
+<li><a href="#_deployment_in_die_leocloud">16. Deployment in die LeoCloud</a></li>
+<li><a href="#_dashboard_installieren">17. Dashboard installieren</a></li>
+<li><a href="#_bearer_token_erstellen">18. Bearer-Token erstellen</a></li>
+<li><a href="#_dashboard_forwarden">19. Dashboard forwarden</a></li>
+<li><a href="#_dashboard_öffnen">20. Dashboard öffnen</a></li>
+<li><a href="#_zugriff_auf_projekt">21. Zugriff auf Projekt</a></li>
+<li><a href="#_dashboard_entfernen">22. Dashboard entfernen</a></li>
+<li><a href="#_fazit">23. Fazit</a></li>
 </ul>
 </div>
 </div>
@@ -590,7 +823,7 @@ Optionale Schritte wie GitHub Actions sind ebenfalls erwähnt.</p>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_voraussetzungen">Voraussetzungen</h2>
+<h2 id="_voraussetzungen">1. Voraussetzungen</h2>
 <div class="sectionbody">
 <div class="admonitionblock note">
 <table>
@@ -620,17 +853,7 @@ Optionale Schritte wie GitHub Actions sind ebenfalls erwähnt.</p>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_überblick">Überblick</h2>
-<div class="sectionbody">
-<div class="imageblock">
-<div class="content">
-<img src="images/Overview-deployment.drawio.png" alt="Overview">
-</div>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_schritte_für_das_deployment_in_minikube">Schritte für das Deployment in Minikube</h2>
+<h2 id="_schritte_für_das_deployment_in_minikube">2. Schritte für das Deployment in Minikube</h2>
 <div class="sectionbody">
 <div class="imageblock">
 <div class="content">
@@ -640,7 +863,7 @@ Optionale Schritte wie GitHub Actions sind ebenfalls erwähnt.</p>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>Als erstes ein Quarkus-Projekt mit einem simplen REST-Endpoint erstellen.</p>
+<p>Als Erstes ein Quarkus-Projekt mit einem simplen REST-Endpoint erstellen.</p>
 </li>
 <li>
 <p>Uber-JAR erstellen.</p>
@@ -662,50 +885,83 @@ Optionale Schritte wie GitHub Actions sind ebenfalls erwähnt.</p>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_1_quarkus_projekt_erstellen">1. Quarkus-Projekt erstellen</h2>
+<h2 id="_quarkus_projekt_herunterladen">3. Quarkus-Projekt herunterladen</h2>
 <div class="sectionbody">
-<div class="listingblock">
+<div class="imageblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="shell">mvn io.quarkus:quarkus-maven-plugin
-
--DprojectGroupId=com.example
--DprojectArtifactId=backend
--DclassName=&quot;com.example.GreetingResource&quot;
--Dpath=&quot;/hello&quot;</code></pre>
+<img src="images/step1_deployment.drawio.png" alt="Quarkus-Projekt erstellen">
 </div>
+</div>
+<div class="paragraph">
+<p>Lade dir das Projekt unter diesem Link herunter und builde es.</p>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+<a href="/home/laurent/Dokumente/Referat/01-referate-LaurentMali/minikube-pvc.zip">Minikube-Projekt</a>
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Entpacke das Projekt und dann kann der Spaß anfangen</p>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_2_datenbank_hinzufügen">2. Datenbank hinzufügen</h2>
+<h2 id="_datenbank_hinzufügen">4. Datenbank hinzufügen</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Führe folgenden Befehl aus um die Datenbank zu erstellen:</p>
+<p>Führe folgenden Befehl aus, um die Datenbank zu erstellen:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="shell">./postgres-create-db.sh</code></pre>
+<pre class="rouge highlight"><code data-lang="shell">./postgres-create-db.sh</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>Um die Datenbank zu starten führe diesen Befehl aus:</p>
+<p>Um die Datenbank zu starten, führe diesen Befehl aus:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="shell">./postgres-start.sh</code></pre>
+<pre class="rouge highlight"><code data-lang="shell">./postgres-start.sh</code></pre>
 </div>
 </div>
 <div class="ulist">
 <ul>
 <li>
-<p>In den application.properties findet man den Username, das Passwort und die URL der Datenbank.</p>
+<p>In den application.properties findet man den Username, das Passwort und die URL der Datenbank, die man für die
+Datenbankanbindung benötigt.</p>
 </li>
 </ul>
+</div>
+<div class="paragraph">
+<p><strong>application.properties</strong></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="shell"><span class="c"># datasource configuration</span>
+quarkus.datasource.db-kind <span class="o">=</span> postgresql
+quarkus.datasource.username <span class="o">=</span> demo
+quarkus.datasource.password <span class="o">=</span> demo
+quarkus.datasource.jdbc.url <span class="o">=</span> jdbc:postgresql://localhost:5432/demo
+%prod.quarkus.datasource.jdbc.url <span class="o">=</span> jdbc:postgresql://postgres:5432/demo
+
+<span class="c"># drop and create the database at startup (use `update` to only update the schema)</span>
+quarkus.hibernate-orm.database.generation<span class="o">=</span>drop-and-create
+
+quarkus.package.jar.type<span class="o">=</span>uber-jar
+quarkus.hibernate-orm.sql-load-script<span class="o">=</span>import.sql</code></pre>
+</div>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_3_minikube_starten">3. Minikube starten</h2>
+<h2 id="_minikube_starten">5. Minikube starten</h2>
 <div class="sectionbody">
 <div class="admonitionblock important">
 <table>
@@ -722,20 +978,30 @@ Starte Minikube mit dem Befehl <code>minikube start</code>.
 </div>
 </div>
 <div class="sect1">
-<h2 id="_4_uber_jar_erstellen">4. Uber-JAR erstellen</h2>
+<h2 id="_uber_jar_erstellen">6. Uber-JAR erstellen</h2>
 <div class="sectionbody">
-<div class="paragraph">
-<p>Nun "verpacken" wir das Projekt, um es ausführbar zu machen.</p>
+<div class="imageblock">
+<div class="content">
+<img src="images/step3_deployment.drawio.png" alt="Uber-JAR erstellen">
 </div>
-<div class="ulist">
-<ul>
-<li>
-<p>Wir nehmen ein Uber-JAR, und kein normales JAR, sodass alle Abhängigkeiten enthalten sind.</p>
-</li>
-</ul>
 </div>
 <div class="paragraph">
-<p>In den application.properties fügen wir folgendes hinzu um es als Uber-JAR zu erstellen:</p>
+<p>Nun "verpacken" wir das Projekt in ein Uber-Jar, um es ausführbar zu machen.</p>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+Wir nehmen ein Uber-JAR, und kein normales JAR, sodass alle Abhängigkeiten enthalten sind.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>In den application.properties fügen wir Folgendes hinzu, um es als Uber-JAR zu erstellen:</p>
 </div>
 <div class="ulist">
 <ul>
@@ -748,7 +1014,7 @@ Starte Minikube mit dem Befehl <code>minikube start</code>.
 </ul>
 </div>
 <div class="paragraph">
-<p>Erstelle nun das Uber-JAR mit dem Befehl <code>mvn package</code>.</p>
+<p>Erstelle nun das Uber-JAR mit dem Befehl <code>./mvnw clean package</code>.</p>
 </div>
 <div class="paragraph">
 <p>Das Uber-JAR befindet sich im <code>target</code>-Ordner.</p>
@@ -756,19 +1022,19 @@ Starte Minikube mit dem Befehl <code>minikube start</code>.
 </div>
 </div>
 <div class="sect1">
-<h2 id="_5_dockerfile_erstellen">5. Dockerfile erstellen</h2>
+<h2 id="_dockerfile_erstellen">7. Dockerfile erstellen</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>Im Ordner <code>minikube/src/main/docker</code> erstellen wir ein Dockerfile.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="shell">FROM eclipse-temurin:21-jre
+<pre class="rouge highlight"><code data-lang="shell">FROM eclipse-temurin:21-jre
 
-RUN mkdir -p /opt/application
-COPY *-runner.jar /opt/application/backend.jar
+RUN <span class="nb">mkdir</span> <span class="nt">-p</span> /opt/application
+COPY <span class="k">*</span><span class="nt">-runner</span>.jar /opt/application/backend.jar
 WORKDIR /opt/application
-CMD [ &quot;java&quot;, &quot;-jar&quot;, &quot;backend.jar&quot; ]</code></pre>
+CMD <span class="o">[</span> <span class="s2">"java"</span>, <span class="s2">"-jar"</span>, <span class="s2">"backend.jar"</span> <span class="o">]</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -776,19 +1042,24 @@ CMD [ &quot;java&quot;, &quot;-jar&quot;, &quot;backend.jar&quot; ]</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="shell">cp src/main/docker/Dockerfile target/</code></pre>
+<pre class="rouge highlight"><code data-lang="shell"><span class="nb">cp </span>src/main/docker/Dockerfile target/</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>Baue das Docker-Image mit dem Befehl <code>docker build --tag ghcr.io/$GITHUB_REPOSITORY/backend</code>.</p>
+<p>Das target-Verzeichnis sollte nach all diesen Schritten wie folgt aussehen:</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="images/target.png" alt="Target-Verzeichnis">
+</div>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_6_image_zu_github_container_registry_pushen">6. Image zu GitHub Container Registry pushen</h2>
+<h2 id="_github_token_zum_anmelden">8. Github-Token zum Anmelden</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>: <strong>Docker-Image hochladen</strong></p>
+<p>Bevor wir das Docker-Image in die GitHub Container Registry pushen können, benötigen wir einen GitHub-Token für die Anmeldung.</p>
 </div>
 <div class="admonitionblock important">
 <table>
@@ -797,23 +1068,13 @@ CMD [ &quot;java&quot;, &quot;-jar&quot;, &quot;backend.jar&quot; ]</code></pre>
 <i class="fa icon-important" title="Important"></i>
 </td>
 <td class="content">
-Melde dich bei der GitHub Container Registry an:
+Den Token aufbewahren, da dieser dann nicht mehr sichtbar ist.
 </td>
 </tr>
 </table>
 </div>
-<div class="listingblock">
-<div class="content">
-<pre class="CodeRay highlight"><code data-lang="shell">docker login ghcr.io -u $GITHUB_ACTOR -p $GITHUB_TOKEN</code></pre>
-</div>
-</div>
 <div class="paragraph">
-<p>Push das Docker-Image in die GitHub Container Registry:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="CodeRay highlight"><code data-lang="shell">docker push ghcr.io/$GITHUB_REPOSITORY/backend</code></pre>
-</div>
+<p>Diesen kann man unter dem Pfad <code>Settings &#8594; Developer settings &#8594; Personal access tokens &#8594; Generate new Token</code> erstellen.</p>
 </div>
 <div class="imageblock">
 <div class="content">
@@ -823,8 +1084,13 @@ Melde dich bei der GitHub Container Registry an:
 </div>
 </div>
 <div class="sect1">
-<h2 id="_7_build_sh_file">7. build.sh-File</h2>
+<h2 id="_build_sh_file">9. build.sh-File</h2>
 <div class="sectionbody">
+<div class="imageblock">
+<div class="content">
+<img src="images/step4_deployment.drawio.png" alt="Docker-Image">
+</div>
+</div>
 <div class="ulist">
 <ul>
 <li>
@@ -834,77 +1100,82 @@ Melde dich bei der GitHub Container Registry an:
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="shell">mvn -B package
-cp src/main/docker/Dockerfile target/
-docker login ghcr.io -u $GITHUB_ACTOR -p $GITHUB_TOKEN
-docker build --tag ghcr.io/$GITHUB_REPOSITORY/backend:latest ./target
-docker push ghcr.io/$GITHUB_REPOSITORY/backend:latest</code></pre>
+<pre class="rouge highlight"><code data-lang="shell">mvn <span class="nt">-B</span> package
+<span class="nb">cp </span>src/main/docker/Dockerfile target/
+docker login ghcr.io <span class="nt">-u</span> <span class="nv">$GITHUB_ACTOR</span> <span class="nt">-p</span> <span class="nv">$GITHUB_TOKEN</span>
+docker build <span class="nt">--tag</span> ghcr.io/<span class="nv">$GITHUB_REPOSITORY</span>/backend:latest ./target
+docker push ghcr.io/<span class="nv">$GITHUB_REPOSITORY</span>/backend:latest</code></pre>
 </div>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_8_deployment_in_minikube">8. Deployment in Minikube</h2>
+<h2 id="_deployment_in_minikube">10. Deployment in Minikube</h2>
 <div class="sectionbody">
+<div class="imageblock">
+<div class="content">
+<img src="images/step6_deployment.drawio.png" alt="Deployment in Minikube">
+</div>
+</div>
 <div class="ulist">
 <ul>
 <li>
 <p>Ganz oben im root-Verzeichnis befindet sich der Ordner <code>.github/workflows</code>.</p>
 </li>
 <li>
-<p>Dort erstellen wir das <code>build.yaml</code>-File.</p>
+<p>Dort erstellen wir das <code>build.yaml</code>-File für die Github Actions.</p>
 </li>
 </ul>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="yaml"><span style="color:#606">name</span>: <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#D20">Build and Deploy Dockerfiles</span></span>
-<span style="color:#606">run-name</span>: <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#D20">${{ github.actor }} is building Docker images 🚀</span></span>
-<span style="color:#606">on</span>: <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#D20">[ push ]</span></span>
-<span style="color:#606">jobs</span>:
-  <span style="color:#606">build-images</span>:
-    <span style="color:#606">permissions</span>: <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#D20">write-all</span></span>
-    <span style="color:#606">runs-on</span>: <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#D20">ubuntu-22.04</span></span>
-    <span style="color:#606">steps</span>:
-      - <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#D20">name: Check out repository code</span></span>
-        <span style="color:#606">uses</span>: <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#D20">actions/checkout@v4</span></span>
+<pre class="rouge highlight"><code data-lang="yaml"><span class="na">name</span><span class="pi">:</span> <span class="s">Build and Deploy Dockerfiles</span>
+<span class="na">run-name</span><span class="pi">:</span> <span class="s">${{ github.actor }} is building Docker images 🚀</span>
+<span class="na">on</span><span class="pi">:</span> <span class="pi">[</span> <span class="nv">push</span> <span class="pi">]</span>
+<span class="na">jobs</span><span class="pi">:</span>
+  <span class="na">build-images</span><span class="pi">:</span>
+    <span class="na">permissions</span><span class="pi">:</span> <span class="s">write-all</span>
+    <span class="na">runs-on</span><span class="pi">:</span> <span class="s">ubuntu-22.04</span>
+    <span class="na">steps</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="na">name</span><span class="pi">:</span> <span class="s">Check out repository code</span>
+        <span class="na">uses</span><span class="pi">:</span> <span class="s">actions/checkout@v4</span>
 
-      - <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#D20">name: Login to GitHub Container Registry</span></span>
-        <span style="color:#606">uses</span>: <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#D20">docker/login-action@v3</span></span>
-        <span style="color:#606">with</span>:
-          <span style="color:#606">registry</span>: <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#D20">ghcr.io</span></span>
-          <span style="color:#606">username</span>: <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#D20">${{ github.actor }}</span></span>
-          <span style="color:#606">password</span>: <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#D20">${{ secrets.GITHUB_TOKEN }}</span></span>
+      <span class="pi">-</span> <span class="na">name</span><span class="pi">:</span> <span class="s">Login to GitHub Container Registry</span>
+        <span class="na">uses</span><span class="pi">:</span> <span class="s">docker/login-action@v3</span>
+        <span class="na">with</span><span class="pi">:</span>
+          <span class="na">registry</span><span class="pi">:</span> <span class="s">ghcr.io</span>
+          <span class="na">username</span><span class="pi">:</span> <span class="s">${{ github.actor }}</span>
+          <span class="na">password</span><span class="pi">:</span> <span class="s">${{ secrets.GITHUB_TOKEN }}</span>
 
-      - <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#D20">run: |</span><span style="color:#D20">
-          pwd
-          ls -lah</span></span>
-        <span style="color:#606">working-directory</span>: <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#D20">./k8s</span></span>
+      <span class="pi">-</span> <span class="na">run</span><span class="pi">:</span> <span class="pi">|</span>
+          <span class="s">pwd</span>
+          <span class="s">ls -lah</span>
+        <span class="na">working-directory</span><span class="pi">:</span> <span class="s">./k8s</span>
 
-      - <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#D20">uses: actions/setup-java@v4</span></span>
-        <span style="color:#606">with</span>:
-          <span style="color:#606">distribution</span>: <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#D20">'temurin'</span></span>
-          <span style="color:#606">java-version</span>: <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#D20">'21'</span></span>
-          <span style="color:#606">cache</span>: <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#D20">'maven'</span></span>
+      <span class="pi">-</span> <span class="na">uses</span><span class="pi">:</span> <span class="s">actions/setup-java@v4</span>
+        <span class="na">with</span><span class="pi">:</span>
+          <span class="na">distribution</span><span class="pi">:</span> <span class="s1">'</span><span class="s">temurin'</span>
+          <span class="na">java-version</span><span class="pi">:</span> <span class="s1">'</span><span class="s">21'</span>
+          <span class="na">cache</span><span class="pi">:</span> <span class="s1">'</span><span class="s">maven'</span>
 
-      - <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#D20">name: Set up Docker Buildx</span></span>
-        <span style="color:#606">uses</span>: <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#D20">docker/setup-buildx-action@v3</span></span>
+      <span class="pi">-</span> <span class="na">name</span><span class="pi">:</span> <span class="s">Set up Docker Buildx</span>
+        <span class="na">uses</span><span class="pi">:</span> <span class="s">docker/setup-buildx-action@v3</span>
 
-      - <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#D20">name: Build with Maven</span></span>
-        <span style="color:#606">run</span>: <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#D20">./build.sh</span></span></code></pre>
+      <span class="pi">-</span> <span class="na">name</span><span class="pi">:</span> <span class="s">Build with Maven</span>
+        <span class="na">run</span><span class="pi">:</span> <span class="s">./build.sh</span></code></pre>
 </div>
 </div>
 <div class="ulist">
 <ul>
 <li>
-<p>Commiten, pushen und nun können wir in Github überprüfen ob das Docker-Image gebaut wurde.</p>
+<p>Commiten, pushen und nun können wir in Github im Tab <strong>Actions</strong> überprüfen, ob das Docker-Image gebaut wurde.</p>
 </li>
 </ul>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_9_package_public_machen">9. Package public machen</h2>
+<h2 id="_package_public_machen">11. Package public machen</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>Wir müssen das Package public machen, damit wir es in Minikube deployen können und uns viele Schritte vereinfachen können.</p>
@@ -915,10 +1186,10 @@ docker push ghcr.io/$GITHUB_REPOSITORY/backend:latest</code></pre>
 <p>Wir klicken auf unseren User und gehen in den Tab <strong>Packages</strong>.</p>
 </li>
 <li>
-<p>Dort sehen wir das erstellte Package und klicken drauf.</p>
+<p>Dort sehen wir das erstellte Package und klicken darauf.</p>
 </li>
 <li>
-<p>Rechts sehen wir <strong>Package settings</strong> und klicken drauf.</p>
+<p>Rechts sehen wir <strong>Package settings</strong> und klicken darauf.</p>
 </li>
 <li>
 <p>Dort sehen wir <strong>Change package visibility</strong> und klicken auf <strong>Change visibility</strong>.</p>
@@ -931,7 +1202,7 @@ docker push ghcr.io/$GITHUB_REPOSITORY/backend:latest</code></pre>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_10_konfiguration_für_das_deployment_in_minikube">10. Konfiguration für das Deployment in Minikube</h2>
+<h2 id="_konfiguration_für_das_deployment_in_minikube">12. Konfiguration für das Deployment in Minikube</h2>
 <div class="sectionbody">
 <div class="ulist">
 <ul>
@@ -942,54 +1213,77 @@ docker push ghcr.io/$GITHUB_REPOSITORY/backend:latest</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="yaml"><span style="color:#777"># Quarkus Application Server</span>
-<span style="color:#606">apiVersion</span>: <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#D20">apps/v1</span></span>
-<span style="color:#606">kind</span>: <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#D20">Deployment</span></span>
-<span style="color:#606">metadata</span>:
-  <span style="color:#606">name</span>: <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#D20">appsrv</span></span>
+<pre class="rouge highlight"><code data-lang="yaml"><span class="c1"># Quarkus Application Server</span>
+<span class="na">apiVersion</span><span class="pi">:</span> <span class="s">apps/v1</span>
+<span class="na">kind</span><span class="pi">:</span> <span class="s">Deployment</span>
+<span class="na">metadata</span><span class="pi">:</span>
+  <span class="na">name</span><span class="pi">:</span> <span class="s">appsrv</span>
 
-<span style="color:#606">spec</span>:
-  <span style="color:#606">replicas</span>: <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#D20">1</span></span>
-  <span style="color:#606">selector</span>:
-    <span style="color:#606">matchLabels</span>:
-      <span style="color:#606">app</span>: <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#D20">appsrv</span></span>
-  <span style="color:#606">template</span>:
-    <span style="color:#606">metadata</span>:
-      <span style="color:#606">labels</span>:
-        <span style="color:#606">app</span>: <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#D20">appsrv</span></span>
-    <span style="color:#606">spec</span>:
-      <span style="color:#606">containers</span>:
-        - <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#D20">name: appsrv</span></span>
-          <span style="color:#606">image</span>: <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#D20">ghcr.io/laurentmali/backend:latest</span></span> <i class="conum" data-value="1"></i><b>(1)</b>
-          <span style="color:#777"># remove this when stable. Currently we do not take care of version numbers</span>
-          <span style="color:#606">imagePullPolicy</span>: <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#D20">Always</span></span>
-          <span style="color:#606">ports</span>:
-            - <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#D20">containerPort: 8080</span></span>
-          <span style="color:#606">readinessProbe</span>:
-            <span style="color:#606">tcpSocket</span>:
-              <span style="color:#606">port</span>: <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#D20">8080</span></span>
-            <span style="color:#606">initialDelaySeconds</span>: <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#D20">5</span></span>
-            <span style="color:#606">periodSeconds</span>: <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#D20">10</span></span>
-          <span style="color:#606">livenessProbe</span>:
-            <span style="color:#606">httpGet</span>:
-              <span style="color:#606">path</span>: <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#D20">/q/health/live</span></span>
-              <span style="color:#606">port</span>: <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#D20">8080</span></span>
-            <span style="color:#606">timeoutSeconds</span>: <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#D20">5</span></span>
-            <span style="color:#606">initialDelaySeconds</span>: <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#D20">60</span></span>
-            <span style="color:#606">periodSeconds</span>: <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#D20">120</span></span>
-<span style="color:#f8f;background:#505"><span style="color:#f4f">---</span></span>
-<span style="color:#606">apiVersion</span>: <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#D20">v1</span></span>
-<span style="color:#606">kind</span>: <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#D20">Service</span></span>
-<span style="color:#606">metadata</span>:
-  <span style="color:#606">name</span>: <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#D20">appsrv</span></span>
+<span class="na">spec</span><span class="pi">:</span>
+  <span class="na">replicas</span><span class="pi">:</span> <span class="m">1</span>
+  <span class="na">selector</span><span class="pi">:</span>
+    <span class="na">matchLabels</span><span class="pi">:</span>
+      <span class="na">app</span><span class="pi">:</span> <span class="s">appsrv</span>
+  <span class="na">template</span><span class="pi">:</span>
+    <span class="na">metadata</span><span class="pi">:</span>
+      <span class="na">labels</span><span class="pi">:</span>
+        <span class="na">app</span><span class="pi">:</span> <span class="s">appsrv</span>
+    <span class="na">spec</span><span class="pi">:</span>
+      <span class="na">containers</span><span class="pi">:</span>
+        <span class="pi">-</span> <span class="na">name</span><span class="pi">:</span> <span class="s">appsrv</span>
+          <span class="na">image</span><span class="pi">:</span> <span class="s">ghcr.io/laurentmali/backend:latest</span> <i class="conum" data-value="1"></i><b>(1)</b>
+          <span class="c1"># remove this when stable. Currently we do not take care of version numbers</span>
+          <span class="na">imagePullPolicy</span><span class="pi">:</span> <span class="s">Always</span>
+          <span class="na">ports</span><span class="pi">:</span>
+            <span class="pi">-</span> <span class="na">containerPort</span><span class="pi">:</span> <span class="m">8080</span>
+          <span class="na">readinessProbe</span><span class="pi">:</span>
+            <span class="na">tcpSocket</span><span class="pi">:</span>
+              <span class="na">port</span><span class="pi">:</span> <span class="m">8080</span>
+            <span class="na">initialDelaySeconds</span><span class="pi">:</span> <span class="m">5</span>
+            <span class="na">periodSeconds</span><span class="pi">:</span> <span class="m">10</span>
+          <span class="na">livenessProbe</span><span class="pi">:</span>
+            <span class="na">httpGet</span><span class="pi">:</span>
+              <span class="na">path</span><span class="pi">:</span> <span class="s">/q/health/live</span>
+              <span class="na">port</span><span class="pi">:</span> <span class="m">8080</span>
+            <span class="na">timeoutSeconds</span><span class="pi">:</span> <span class="m">5</span>
+            <span class="na">initialDelaySeconds</span><span class="pi">:</span> <span class="m">60</span>
+            <span class="na">periodSeconds</span><span class="pi">:</span> <span class="m">120</span>
+<span class="nn">---</span>
+<span class="na">apiVersion</span><span class="pi">:</span> <span class="s">v1</span>
+<span class="na">kind</span><span class="pi">:</span> <span class="s">Service</span>
+<span class="na">metadata</span><span class="pi">:</span>
+  <span class="na">name</span><span class="pi">:</span> <span class="s">appsrv</span>
 
-<span style="color:#606">spec</span>:
-  <span style="color:#606">ports</span>:
-    - <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#D20">port: 8080</span></span>
-      <span style="color:#606">targetPort</span>: <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#D20">8080</span></span>
-      <span style="color:#606">protocol</span>: <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#D20">TCP</span></span>
-  <span style="color:#606">selector</span>:
-    <span style="color:#606">app</span>: <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#D20">appsrv</span></span></code></pre>
+<span class="na">spec</span><span class="pi">:</span>
+  <span class="na">ports</span><span class="pi">:</span>
+    <span class="pi">-</span> <span class="na">port</span><span class="pi">:</span> <span class="m">8080</span>
+      <span class="na">targetPort</span><span class="pi">:</span> <span class="m">8080</span>
+      <span class="na">protocol</span><span class="pi">:</span> <span class="s">TCP</span>
+  <span class="na">selector</span><span class="pi">:</span>
+    <span class="na">app</span><span class="pi">:</span> <span class="s">appsrv</span>
+<span class="nn">---</span>
+<span class="na">apiVersion</span><span class="pi">:</span> <span class="s">networking.k8s.io/v1</span>
+<span class="na">kind</span><span class="pi">:</span> <span class="s">Ingress</span>
+<span class="na">metadata</span><span class="pi">:</span>
+  <span class="na">name</span><span class="pi">:</span> <span class="s">appsrv-ingress</span>
+  <span class="na">annotations</span><span class="pi">:</span>
+    <span class="na">nginx.ingress.kubernetes.io/enable-cors</span><span class="pi">:</span> <span class="s2">"</span><span class="s">true"</span>
+    <span class="na">nginx.ingress.kubernetes.io/cors-allow-methods</span><span class="pi">:</span> <span class="s2">"</span><span class="s">PUT,</span><span class="nv"> </span><span class="s">GET,</span><span class="nv"> </span><span class="s">POST,</span><span class="nv"> </span><span class="s">OPTIONS,</span><span class="nv"> </span><span class="s">DELETE"</span>
+    <span class="c1"># if the exposed path doesn't match backend path</span>
+    <span class="c1"># INGRESS.kubernetes.io/rewrite-target: /</span>
+<span class="na">spec</span><span class="pi">:</span>
+  <span class="na">ingressClassName</span><span class="pi">:</span> <span class="s">nginx</span>
+  <span class="na">rules</span><span class="pi">:</span>
+    <span class="pi">-</span> <span class="na">host</span><span class="pi">:</span> <span class="s">ifXXXXXX.cloud.htl-leonding.ac.at</span> <i class="conum" data-value="2"></i><b>(2)</b>
+      <span class="na">http</span><span class="pi">:</span>
+        <span class="na">paths</span><span class="pi">:</span>
+          <span class="pi">-</span> <span class="na">path</span><span class="pi">:</span> <span class="s">/</span>
+            <span class="na">pathType</span><span class="pi">:</span> <span class="s">Prefix</span>
+            <span class="na">backend</span><span class="pi">:</span>
+              <span class="na">service</span><span class="pi">:</span>
+                <span class="na">name</span><span class="pi">:</span> <span class="s">appsrv</span>
+                <span class="na">port</span><span class="pi">:</span>
+                  <span class="na">number</span><span class="pi">:</span> <span class="s">8080</span></code></pre>
 </div>
 </div>
 <div class="colist arabic">
@@ -998,56 +1292,93 @@ docker push ghcr.io/$GITHUB_REPOSITORY/backend:latest</code></pre>
 <td><i class="conum" data-value="1"></i><b>1</b></td>
 <td>Der Image-Name muss angepasst werden.</td>
 </tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>Ersetze <code>ifXXXXXX</code> durch deinen IF-Schulaccount.</td>
+</tr>
 </table>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_11_deployment_in_minikube">11. Deployment in Minikube</h2>
+<h2 id="_deployment_in_minikube_2">13. Deployment in Minikube</h2>
 <div class="sectionbody">
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="shell">kubectl apply -f k8s/postgres.yaml
-kubectl apply -f k8s/appsrv.yaml</code></pre>
+<pre class="rouge highlight"><code data-lang="shell">kubectl apply <span class="nt">-f</span> k8s/postgres.yaml
+kubectl apply <span class="nt">-f</span> k8s/appsrv.yaml</code></pre>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_minikube_dashboard_zum_überprüfen">13.1. Minikube Dashboard zum Überprüfen</h3>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="shell">minikube dashboard</code></pre>
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="images/running_pods_minikube.png" alt="Pods in Minikube">
+</div>
 </div>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_11_1_minikube_dashboard_zum_überprüfen">11.1 Minikube Dashboard zum Überprüfen</h2>
+<h2 id="_port_forwarding_von_minikube">14. Port Forwarding von Minikube</h2>
+<div class="sectionbody">
+<div class="imageblock">
+<div class="content">
+<img src="images/step7_deployment.drawio.png" alt="Port Forwarding">
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="shell">kubectl port-forward appsrv-xxxxxx-xxxxx 8080:8080 <i class="conum" data-value="1"></i><b>(1)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Ersetze <code>appsrv-xxxxxx-xxxxx</code> durch den Namen des Pods.</td>
+</tr>
+</table>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+Der Name des Pods kann mit dem Befehl <code>kubectl get pods</code> herausgefunden werden.
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_den_endpoint_abrufen">15. Den Endpoint abrufen</h2>
 <div class="sectionbody">
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="shell">minikube dashboard</code></pre>
+<pre class="rouge highlight"><code data-lang="shell">curl http://localhost:8080/api/vehicle</code></pre>
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="images/db_on_localhost.png" alt="Ergebnis">
 </div>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_12_port_forwarding_von_minikube">12. Port Forwarding von Minikube</h2>
-<div class="sectionbody">
-<div class="listingblock">
-<div class="content">
-<pre class="CodeRay highlight"><code data-lang="shell">kubectl port-forward appsrv-xxxxxx-xxxxx 8080:8080</code></pre>
-</div>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_13_in_die_applikation_einloggen">13. In die Applikation "einloggen"</h2>
-<div class="sectionbody">
-<div class="listingblock">
-<div class="content">
-<pre class="CodeRay highlight"><code data-lang="shell">curl http://localhost:8080/api/vehicle</code></pre>
-</div>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_14_deployment_in_leocloud">14. Deployment in LeoCloud</h2>
+<h2 id="_deployment_in_die_leocloud">16. Deployment in die LeoCloud</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Wir haben nun das Projekt in Minikube deployed und können es nun in LeoCloud deployen.</p>
+<p>Wir haben nun das Projekt in Minikube zum Laufen gebracht und können es nun in die LeoCloud deployen.</p>
 </div>
 <div class="admonitionblock warning">
 <table>
@@ -1056,7 +1387,7 @@ kubectl apply -f k8s/appsrv.yaml</code></pre>
 <i class="fa icon-warning" title="Warning"></i>
 </td>
 <td class="content">
-Der erste Schritt ist das löschen der Config-Datei im .kube-Ordner, da diese nicht überschrieben werden kann.
+Der erste Schritt ist das Löschen der Config-Datei im .kube-Ordner, da diese nicht überschrieben werden kann.
 </td>
 </tr>
 </table>
@@ -1075,25 +1406,44 @@ Der erste Schritt ist das löschen der Config-Datei im .kube-Ordner, da diese ni
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="shell">kubectl apply -f appsrv.yaml
-kubectl apply -f postgres.yaml</code></pre>
+<pre class="rouge highlight"><code data-lang="shell">kubectl apply <span class="nt">-f</span> appsrv.yaml
+kubectl apply <span class="nt">-f</span> postgres.yaml</code></pre>
 </div>
+</div>
+<div class="paragraph">
+<p>Nun müssen wir das neue Config-File erstellen und machen das mit dem Befehl <code>leocloud auth login</code>.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="images/auth_login.png" alt="Auth-Login">
+</div>
+</div>
+<div class="paragraph">
+<p>Hier melden wir uns mit dem IF-Schulaccount an.</p>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_15_dashboard_installieren">15. Dashboard installieren</h2>
+<h2 id="_dashboard_installieren">17. Dashboard installieren</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>Installiere das Kubernetes Dashboard mit dem Befehl <code>leocloud get template dashboard | kubectl apply -f -</code>.</p>
 </div>
+<div class="paragraph">
+<p>Wenn alles erfolgreich war, sollte folgende Meldung erscheinen:</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="images/anmeldung_erfolgreich.png" alt="Anmeldung erfolgreich">
+</div>
+</div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_16_bearer_token_erstellen">16. Bearer-Token erstellen</h2>
+<h2 id="_bearer_token_erstellen">18. Bearer-Token erstellen</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Erstelle ein Bearer-Token mit dem Befehl <code>leocloud create token</code>, um Zugriff auf das Dashboard zu erhalten.</p>
+<p>Erstelle ein Bearer-Token mit dem Befehl <code>kubectl create token ifXXXXXX</code>, um Zugriff auf das Dashboard zu erhalten.</p>
 </div>
 <div class="admonitionblock important">
 <table>
@@ -1110,27 +1460,27 @@ Speichere den generierten Token sicher, da es zur Authentifizierung später ben�
 </div>
 </div>
 <div class="sect1">
-<h2 id="_17_dashboard_forwarden">17. Dashboard forwarden</h2>
+<h2 id="_dashboard_forwarden">19. Dashboard forwarden</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>Richte Port-Forwarding für das Dashboard ein:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="shell">kubectl port-forward svc/dashboard 8000:8000</code></pre>
+<pre class="rouge highlight"><code data-lang="shell">kubectl port-forward svc/dashboard 8000:8000</code></pre>
 </div>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_18_dashboard_öffnen">18. Dashboard öffnen</h2>
+<h2 id="_dashboard_öffnen">20. Dashboard öffnen</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>Öffne das Dashboard im Browser mit der URL:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="shell">http://localhost:8000/#/workloads?namespace=student-ifXXXXXX <i class="conum" data-value="1"></i><b>(1)</b></code></pre>
+<pre class="rouge highlight"><code data-lang="shell">http://localhost:8000/#/workloads?namespace<span class="o">=</span>student-ifXXXXXX <i class="conum" data-value="1"></i><b>(1)</b></code></pre>
 </div>
 </div>
 <div class="colist arabic">
@@ -1156,7 +1506,41 @@ Meistens muss man den Link zweimal öffnen!
 </div>
 </div>
 <div class="sect1">
-<h2 id="_19_dashboard_entfernen">19. Dashboard entfernen</h2>
+<h2 id="_zugriff_auf_projekt">21. Zugriff auf Projekt</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Der Zugriff auf das Projekt erfolgt über folgende URL:</p>
+</div>
+<div class="paragraph">
+<p><code>ifXXXXXX.cloud.htl-leonding.ac.at</code></p>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+Ersetze <code>ifXXXXXX</code> durch deinen IF-Schulaccount.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Nun können andere Personen über diesen Link auf das Projekt "zugreifen".</p>
+</div>
+<div class="paragraph">
+<p>Ein Beispiel wie man auf den Endpoint gelangt sieht man im unteren Bild:</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="images/Cloud_URL.png" alt="Cloud-URL">
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_dashboard_entfernen">22. Dashboard entfernen</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>Entferne das Dashboard mit dem Befehl <code>leocloud delete template dashboard | kubectl delete -f -</code>.</p>
@@ -1164,7 +1548,7 @@ Meistens muss man den Link zweimal öffnen!
 </div>
 </div>
 <div class="sect1">
-<h2 id="_20_fazit">20. Fazit</h2>
+<h2 id="_fazit">23. Fazit</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>Das Kubernetes Dashboard bietet eine einfache Möglichkeit, Ressourcen und Workloads in deinem Namespace zu überwachen und zu verwalten.</p>
@@ -1174,7 +1558,8 @@ Meistens muss man den Link zweimal öffnen!
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2024-11-19 10:27:33 +0100
+Version 1.0<br>
+Last updated 2024-12-10 10:02:14 +0100
 </div>
 </div>
 <script>

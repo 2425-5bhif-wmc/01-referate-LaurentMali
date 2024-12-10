@@ -14,7 +14,7 @@ image::img_1.png[width=800]
 
 Deployment ist wichtig, weil:
 
-* Sie es den Benutzern ermöglicht, auf die Anwendung zuzugreifen.
+* Sie es anderen Benutzern ermöglicht, auf die Anwendung zuzugreifen.
 * Sie sicherstellt, dass die Anwendung in einer stabilen Umgebung läuft.
 
 == Was macht Minikube?
@@ -25,17 +25,12 @@ Deployment ist wichtig, weil:
 * Hilft bei der Entwicklung und dem Testen von Kubernetes-Anwendungen.
 * Bietet eine Möglichkeit, Kubernetes zu lernen, ohne einen vollwertigen Cluster zu benötigen.
 
-== Was macht Leocloud?
+== Was ist Leocloud?
 
 *Leocloud* ist eine cloudbasierte Plattform, die:
 
 * Infrastruktur für das Deployment und der Verwaltung von Anwendungen anbietet.
 * schulintern läuft und von Schülern und Lehrkräften der HTL Leonding genutzt werden kann.
-
-== Was ist Leo-Cloud?
-
-* *Leo-Cloud* ist eine Ansammlung von Computern im Keller.
-* Mit Software Kubernetes wird die Infrastruktur verwaltet.
 
 == Alternativen zu Minikube
 

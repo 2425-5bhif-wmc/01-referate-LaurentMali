@@ -1,4 +1,3 @@
-/*https://github.com/asciidoctor/asciidoctor-reveal.js/issues/199*/
 .reveal section img {
     border: 0;
     box-shadow: none;
@@ -10,12 +9,12 @@
     font-size: larger;
 }
 
-.reveal .lightbg { background: #fff8f1d0; }
+.reveal .lightbg { background: white; }
 
-p {
-    font-size: 1.5em;
+.strikethrough {
+    text-decoration: line-through;
 }
 
-.kleinerText {
-    font-size: 0.8em;
+.myTable {
+    font-size: 0.5em;
 }
